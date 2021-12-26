@@ -1,11 +1,13 @@
 from assets.bond import Bond
 from oracles.oracle import get_token_price
 from utils.sys_time import current_date, convert_time
+from agents_database import wallets
 
 treasury = 10 ** 10
 sharetokens = 10 ** 2
 bond_queue = []
 available_bonds = 0
+prior_bonds = 0
 expire_days = convert_time(years=5)
 
 
@@ -24,6 +26,8 @@ def issue_bond(wallet, amount, price_per_one):
     bond_queue.append(new_bond)
     wallet.add_bond(new_bond)
     treasury -= amount * price_per_one
+    available_bonds -= amount
+    prior_bonds += amount
 
 
 def pay_share_token_holder(amount):
@@ -37,7 +41,19 @@ def redeem_bond_amount():  # calculate how much bonds we can buy from agents
 def create_tokens():
     if get_token_price[0] > 1.1:  # first element of "get price tuple" is basis
         amount = get_token_price[0] ** treasury
-        # TODO?
+        if prior_bonds != 0:
+            for item in bond_queue:
+                if amount - item.amount > 0:
+                    amount -= item.amount
+                    prior_bonds -= item.amount
+                    #TODO: add amount to owner of bond
+        
+        if amount > 0:
+            eache_token = amount / sharetokens
+            for wallet in wallets:
+                wellet.basis +=  wallet.sharetokens * eache_token
+
+         
 
 
 def redeem_certain_bond(bond, amount):  # redeem a certain bond
@@ -55,10 +71,6 @@ def redeem_bonds():  # redeem a certain bond
 
 
 def prone_bond_queue():  # remove expired bonds and redeem some of them
-    """
-    We could replace this function with "Binary search" a more efficient algorithm
-    since bond queue is ascending by the time
-    """
     today = current_date()
     while len(bond_queue) > 0 and bond_queue[0].create_date >= today + expire_days:
         bond_queue.pop(0)
