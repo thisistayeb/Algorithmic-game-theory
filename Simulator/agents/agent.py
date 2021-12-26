@@ -5,29 +5,26 @@ class Agent:
     def __init__(self):
         self.wallet = Wallet()
 
-    def add_usd_to_wallet(self, amount):
-        self.wallet.add_usd(amount)
+    def buy_basis(self, amount):  # this method can be override by its child
+        self.wallet.add_basis(amount)
 
-    def buy_basis(self):  # this method can be override by its child
-        pass
+    def sell_basis(self, amount):  # this method can be override by its child
+        self.wallet.add_basis(-1 * amount)
 
-    def sell_basis(self):  # this method can be override by its child
-        pass
+    def buy_share(self, amount):  # this method can be override by its child
+        self.wallet.add_share(amount)
 
-    def buy_share(self):  # this method can be override by its child
-        pass
+    def sell_share(self, amount):  # this method can be override by its child
+        self.wallet.add_share(-1 * amount)
 
-    def sell_share(self):  # this method can be override by its child
-        pass
-
-    def buy_bond(self):  # this method can be override by its child
-        pass
+    def buy_bond(self, bond):  # this method can be override by its child
+        self.wallet.add_bond(bond)
 
     def sell_bond(self):  # this method can be override by its child
         pass
 
-    def buy_usd(self):  # this method can be override by its child
-        pass
+    def buy_usd(self, amount):  # this method can be override by its child
+        self.wallet.add_usd(amount)
 
-    def sell_usd(self):  # this method can be override by its child
-        pass
+    def sell_usd(self, amount): # this method can be override by its child
+        self.wallet.add_usd(-1 * amount)
