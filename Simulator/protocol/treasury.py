@@ -10,6 +10,8 @@ class Treasury:
         self.expire_days = 365 * 5
 
     def create_bond(self, wallet, paid_value):
+        # this method creates new bond and add it to wallet
+        # use validations before calling this method
         new_bond = Bond(owner_id=wallet.address, create_date=current_date())
         self.bond_queue.append(new_bond)
         wallet.add_bond(new_bond)
