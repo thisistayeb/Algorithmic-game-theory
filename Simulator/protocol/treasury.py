@@ -1,5 +1,6 @@
 from assets.bond import Bond
 from utils.random_generator import current_date
+from oracles.oracle import get_token_price
 
 
 class Treasury:
@@ -25,5 +26,6 @@ class Treasury:
         pass
 
     def get_price(self):  # get a tuple which contains token prices (basis, shares, bond)
+        # use get_token_price function in oracles.oracle for get the prices
         pass
 
