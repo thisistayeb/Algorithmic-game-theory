@@ -2,8 +2,8 @@ from wallet.wallet import Wallet
 
 
 class Agent:
-    def __init__(self):
-        self.wallet = Wallet()
+    def __init__(self, wallet: Wallet):
+        self.wallet = wallet
 
     def buy_basis(self, amount):  # this method can be override by its child
         self.wallet.add_basis(amount)
