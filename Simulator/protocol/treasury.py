@@ -37,6 +37,7 @@ def redeem_bond_amount():  # calculate how much bonds we can buy from agents
 def create_tokens():
     if get_token_price[0] > 1.1:  # first element of "get price tuple" is basis
         amount = get_token_price[0] ** treasury
+        # TODO?
 
 
 def redeem_certain_bond(bond, amount):  # redeem a certain bond

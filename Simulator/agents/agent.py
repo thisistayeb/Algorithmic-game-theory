@@ -26,5 +26,8 @@ class Agent:
     def buy_usd(self, amount):  # this method can be override by its child
         self.wallet.add_usd(amount)
 
-    def sell_usd(self, amount): # this method can be override by its child
+    def sell_usd(self, amount):  # this method can be override by its child
         self.wallet.add_usd(-1 * amount)
+
+    def action(self):  # this method will be overridden by its subclasses
+        pass
