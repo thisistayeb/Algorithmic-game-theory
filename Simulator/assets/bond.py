@@ -2,7 +2,8 @@ from utils.random_generator import generate_bond_address
 
 
 class Bond:
-    def __init__(self, owner_id, create_date):
+    def __init__(self, owner_id, create_date, amount):
         self.owner_id = owner_id
         self.create_date = create_date
         self.id = generate_bond_address()
+        self.amount = amount
