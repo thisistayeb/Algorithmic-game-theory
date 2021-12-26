@@ -1,7 +1,7 @@
 from assets.bond import Bond
 from oracles.oracle import get_token_price
 from utils.sys_time import current_date, convert_time
-from agents_database import wallets
+from agents_database import wallets, address_to_wallet
 
 treasury = 10 ** 10
 sharetokens = 10 ** 2
@@ -19,7 +19,7 @@ def create_bond():
 
 
 def issue_bond(wallet, amount, price_per_one):
-    global treasury
+    global treasury, prior_bonds
     if amount > available_bonds:
         raise "Currently, there are not enough bonds available"
     new_bond = Bond(owner_id=wallet.address, create_date=current_date(), amount=amount)
@@ -46,14 +46,13 @@ def create_tokens():
                 if amount - item.amount > 0:
                     amount -= item.amount
                     prior_bonds -= item.amount
-                    #TODO: add amount to owner of bond
-        
+                    address_to_wallet[item.owner_id].add_basis(amount)
+                    # TODO: add amount to owner of bond
+
         if amount > 0:
             eache_token = amount / sharetokens
             for wallet in wallets:
-                wellet.basis +=  wallet.sharetokens * eache_token
-
-         
+                wallet.basis += wallet.sharetokens * eache_token
 
 
 def redeem_certain_bond(bond, amount):  # redeem a certain bond
