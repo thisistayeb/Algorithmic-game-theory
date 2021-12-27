@@ -31,42 +31,31 @@ def issue_bond(wallet, amount, price_per_one):
 
 
 def pay_share_token_holder(amount):
-    pass
-
-
-def redeem_bond_amount():  # calculate how much bonds we can buy from agents
-    pass
+    each_token = amount / sharetokens
+    for wallet in wallets:
+        wallet.add_basis(wallet.sharetokens * each_token)
 
 
 def create_tokens():
     if get_token_price[0] > 1.1:  # first element of "get price tuple" is basis
         amount = get_token_price[0] ** treasury
-        if prior_bonds != 0:
-            for item in bond_queue:
-                if amount - item.amount > 0:
-                    amount -= item.amount
-                    prior_bonds -= item.amount
-                    address_to_wallet[item.owner_id].add_basis(amount)
-                    # TODO: add amount to owner of bond
-
-        if amount > 0:
-            eache_token = amount / sharetokens
-            for wallet in wallets:
-                wallet.basis += wallet.sharetokens * eache_token
+        amount = redeem_bonds(amount)
+        pay_share_token_holder(amount)
 
 
 def redeem_certain_bond(bond, amount):  # redeem a certain bond
     bond.amount -= amount
+    address_to_wallet[bond.owner_id].add_basis(amount)
 
 
-def redeem_bonds():  # redeem a certain bond
-    can_redeem = redeem_bond_amount()
+def redeem_bonds(can_redeem):  # redeem a certain bond
     while len(bond_queue) > 0 and can_redeem > 0:
         while len(bond_queue) > 0 and bond_queue[0].amount == 0:
             bond_queue.pop(0)
         amount = min(bond_queue[0].amount, can_redeem)
         redeem_certain_bond(bond_queue[0], amount)
         can_redeem -= amount
+    return can_redeem
 
 
 def prone_bond_queue():  # remove expired bonds and redeem some of them
