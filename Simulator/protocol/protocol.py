@@ -10,7 +10,8 @@ def action():  # some simple actions are here. TODO
         treasury.prone_bond_queue()
         treasury.pay_share_token_holder()
     elif token_price[0] < 0.9:
-        # create bonds and sell them to agents
+        treasury.create_bond()
+        # TODO
         pass
     else:  # the basis price is between 0.9$ and 1.1$
         pass
