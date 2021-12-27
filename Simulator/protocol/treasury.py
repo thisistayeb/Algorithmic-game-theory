@@ -10,14 +10,14 @@ available_bonds = 0
 expire_days = convert_time(years=5)
 
 
-def create_bond():
+def create_bond():  # calculate available bonds for sell to agents
     global available_bonds
     if get_token_price[0] < 0.9:  # first element of "get price tuple" is basis
         amount = (1 / get_token_price[0]) * treasury
         available_bonds += amount
 
 
-def issue_bond(wallet, amount, price_per_one):
+def issue_bond(wallet, amount, price_per_one):  # create bond and add it to wallet
     global treasury
     if amount > available_bonds:
         raise "Currently, there are not enough bonds available"
@@ -28,7 +28,7 @@ def issue_bond(wallet, amount, price_per_one):
     available_bonds -= amount
 
 
-def pay_share_token_holder(amount):
+def pay_share_token_holder(amount):  # pay extra basis token to all share holders
     each_token = amount / sharetokens
     for wallet in wallets:
         wallet.add_basis(wallet.sharetokens * each_token)
@@ -47,7 +47,7 @@ def redeem_certain_bond(bond, amount):  # redeem a certain bond
     address_to_wallet[bond.owner_id].add_basis(amount)
 
 
-def redeem_bonds(can_redeem):  # redeem a certain bond
+def redeem_bonds(can_redeem):  # redeem bonds from bond_queue
     while len(bond_queue) > 0 and can_redeem > 0:
         while len(bond_queue) > 0 and bond_queue[0].amount == 0:
             bond_queue.pop(0)
