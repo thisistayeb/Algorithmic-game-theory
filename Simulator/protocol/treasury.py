@@ -7,7 +7,6 @@ treasury = 10 ** 10
 sharetokens = 10 ** 2
 bond_queue = []
 available_bonds = 0
-prior_bonds = 0
 expire_days = convert_time(years=5)
 
 
@@ -19,7 +18,7 @@ def create_bond():
 
 
 def issue_bond(wallet, amount, price_per_one):
-    global treasury, prior_bonds
+    global treasury
     if amount > available_bonds:
         raise "Currently, there are not enough bonds available"
     new_bond = Bond(owner_id=wallet.address, create_date=current_date(), amount=amount)
@@ -27,7 +26,6 @@ def issue_bond(wallet, amount, price_per_one):
     wallet.add_bond(new_bond)
     treasury -= amount * price_per_one
     available_bonds -= amount
-    prior_bonds += amount
 
 
 def pay_share_token_holder(amount):
