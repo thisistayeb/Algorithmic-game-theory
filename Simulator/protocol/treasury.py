@@ -14,7 +14,7 @@ expire_days = convert_time(years=5)
 def create_bond():
     global available_bonds
     if get_token_price[0] < 0.9:  # first element of "get price tuple" is basis
-        amount = (1 / get_token_price[0]) ** treasury
+        amount = (1 / get_token_price[0]) * treasury
         available_bonds += amount
 
 
@@ -38,7 +38,8 @@ def pay_share_token_holder(amount):
 
 def create_tokens():
     if get_token_price[0] > 1.1:  # first element of "get price tuple" is basis
-        amount = get_token_price[0] ** treasury
+        amount = (get_token_price[0] - 1) * treasury
+        treasury += amount
         amount = redeem_bonds(amount)
         pay_share_token_holder(amount)
 
