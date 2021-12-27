@@ -13,7 +13,7 @@ expire_days = convert_time(years=5)
 def create_bond():  # calculate available bonds for sell to agents
     global available_bonds
     if get_token_price[0] < 0.9:  # first element of "get price tuple" is basis
-        amount = (1 / get_token_price[0]) * treasury
+        amount = (1 - (1 / get_token_price[0])) * treasury
         available_bonds += amount
 
 
