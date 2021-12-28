@@ -56,7 +56,7 @@ def get_share_token_price():
 
     expected_to_rewarded = 1 - ratio  # honestly, linear expectation for no reason
 
-    return expected_to_rewarded
+    return expected_to_rewarded * price
 
 
 def get_bond_price():
