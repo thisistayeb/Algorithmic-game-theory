@@ -17,11 +17,15 @@ def get_basis_price():
     We assume basis price is depend on last 10 days.
 
   """
-  basis_size_history, basis_price_history  = get_basis_history()
 
+  basis_size_history, basis_price_history  = get_basis_history()
+if len(basis_price_history) =< 10 :
+  return random.gauss(basis_price_history[-1], basis_price_history[-1]//3)
+
+else:
   basis_size_temp = basis_size_history[-9:]
   basis_size_temp = basis_size_temp.reverse()
-  
+
   basis_price_temp = basis_price_history[-9:]
   basis_price_temp = basis_price_temp.reverse()
 
@@ -33,7 +37,7 @@ def get_basis_price():
       overall_price += basis_size_temp[day] * basis_price_temp[day] * discount_factors[day]
       weights += basis_size_temp[day] * discount_factors[day]
       
-  return overall_price/weights
+  return random.gauss(overall_price/weights, overall_price//4*weights)
 
 
 def get_sharetoken_price():
