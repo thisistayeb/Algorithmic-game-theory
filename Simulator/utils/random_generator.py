@@ -11,3 +11,7 @@ def generate_wallet_address():
 
 def generate_bond_address():
     return random_hex(64)
+
+
+def random_gauss(mean, std):
+    return random.gauss(mean, std)
