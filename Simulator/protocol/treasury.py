@@ -7,6 +7,7 @@ treasury = 10 ** 10
 sharetokens = 10 ** 2
 bond_queue = []
 available_bonds = 0
+sum_issued_bonds = 0
 expire_days = convert_time(years=5)
 
 
