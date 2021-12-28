@@ -1,14 +1,15 @@
 # we can create a class for oracles.
 from utils.random_generator import random_gauss, random_uniform
+from oracles.token_stat import *
 
 
 def get_token_price():
     # returns a tuple which contains token prices (basis, shares, bond)
     basis_price = get_basis_price()
-    sharetoken_price = get_sharetoken_price()
+    share_token_price = get_share_token_price()
     bond_price = get_bond_price()
 
-    return basis_price, sharetoken_price, bond_price
+    return basis_price, share_token_price, bond_price
 
 
 def get_basis_price():
@@ -36,7 +37,7 @@ def get_basis_price():
     return random_gauss(overall_price / weights, overall_price // 4 * weights)
 
 
-def get_sharetoken_price():
+def get_share_token_price():
     """
         Share holders get rewarded when no prior bound exists, and each rewarded equally
 
