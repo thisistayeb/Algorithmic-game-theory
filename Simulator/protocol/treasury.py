@@ -7,13 +7,13 @@ treasury = 10 ** 10
 sharetokens = 10 ** 2
 bond_queue = []
 available_bonds = 0
-bond_expire = convert_time(years=5)
+expire_days = convert_time(years=5)
 
 
 def create_bond():  # calculate available bonds for sell to agents
     global available_bonds
     if get_token_price[0] < 0.9:  # first element of "get price tuple" is basis
-        amount = (1 - get_token_price[0]) * treasury
+        amount = ((1 / get_token_price[0]) - 1) * treasury
         available_bonds += amount
 
 
@@ -59,7 +59,7 @@ def redeem_bonds(can_redeem):  # redeem bonds from bond_queue
 
 def prone_bond_queue():  # remove expired bonds and redeem some of them
     today = current_date()
-    while len(bond_queue) > 0 and bond_queue[0].create_date >= today + bond_expire:
+    while len(bond_queue) > 0 and bond_queue[0].create_date >= today + expire_days:
         bond_queue.pop(0)
 
     redeem_bonds()
