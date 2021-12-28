@@ -52,6 +52,7 @@ def get_share_token_price():
     minimum_reward = each_token_reward * basis_price
     maximum_price = minimum_reward / (1 - discount_factor)  # Geometric Series goes to infinity
     price = random_uniform(minimum_reward, maximum_price)
+    ratio = prior_bond / treasury
 
     expected_to_rewarded = 1 - ratio  # honestly, linear expectation for no reason
 
