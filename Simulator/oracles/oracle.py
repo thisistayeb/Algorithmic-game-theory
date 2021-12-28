@@ -19,8 +19,11 @@ def get_basis_price():
   """
   basis_size_history, basis_price_history  = get_basis_history()
 
-  basis_size_temp = basis_size_history[-9::-1]
-  basis_price_temp = basis_price_history[-9::-1]
+  basis_size_temp = basis_size_history[-9:]
+  basis_size_temp = basis_size_temp.reverse()
+  
+  basis_price_temp = basis_price_history[-9:]
+  basis_price_temp = basis_price_temp.reverse()
 
   alpha = 0.9 # or get mean of daily interest rate
   discount_factors = [alpha**i for i in range(10)]
@@ -45,7 +48,7 @@ def get_sharetoken_price():
   each_token_reward = get_each_basis_reward()
   discount_factor = get_daily_inflation_rate()
 
-  minimum_reward = each_token_reward * basis_reward
+  minimum_reward = each_token_reward * basis_price
   maximum_price = minimum_reward / (1- discount_factor) #Geometric Series goes to infinity 
   price = random.uniform(minimum_reward, maximum_price)
   
