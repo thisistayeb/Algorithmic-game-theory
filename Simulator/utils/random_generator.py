@@ -15,3 +15,7 @@ def generate_bond_address():
 
 def random_gauss(mean, std):
     return random.gauss(mean, std)
+
+
+def random_uniform(begin, end):
+    return random.uniform(begin, end)

@@ -1,5 +1,5 @@
 # we can create a class for oracles.
-from utils.random_generator import random_gauss
+from utils.random_generator import random_gauss, random_uniform
 
 
 def get_token_price():
@@ -50,9 +50,9 @@ def get_sharetoken_price():
 
     minimum_reward = each_token_reward * basis_price
     maximum_price = minimum_reward / (1 - discount_factor)  # Geometric Series goes to infinity
-    price = random.uniform(minimum_reward, maximum_price)
+    price = random_uniform(minimum_reward, maximum_price)
 
-    expected_to_rewarded = 1 - ratio  # honestly, linear expectection for no reason
+    expected_to_rewarded = 1 - ratio  # honestly, linear expectation for no reason
 
     return expected_to_rewarded
 
@@ -84,7 +84,7 @@ def get_bond_price():
     maximum_date = 5 * 365
 
     ratio = prior_bond / treasury
-    expected_days_to_reedem = ((1 / (1 - ratio)) - 1) * maximum_date / 2
+    expected_days_to_redeem = ((1 / (1 - ratio)) - 1) * maximum_date / 2
     alpha = get_daily_inflation_rate()
 
-    return (alpha ** expected_days_to_reedem) * basis_price
+    return (alpha ** expected_days_to_redeem) * basis_price
