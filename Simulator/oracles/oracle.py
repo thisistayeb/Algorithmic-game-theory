@@ -16,7 +16,7 @@ def get_basis_price():
 #Basis Price prediction assumes that the price is depend on last 10 days.
     basis_price_history = get_basis_history()
     if len(basis_price_history) < 10:
-        price = max(basis_price_history[-1] + random_gauss(0, 0.5), 0)
+        price = max(basis_price_history[-1] + random_gauss(0, 0.1), random_uniform(0.1,0.5))
         basis_price_history.append(price)
         return price
         
