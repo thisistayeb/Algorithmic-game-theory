@@ -18,27 +18,23 @@ def get_basis_price():
       We assume basis price is depend on last 10 days.
 
     """
-    basis_size_history, basis_price_history = get_basis_history()
+    basis_price_history = get_basis_history()
     if len(basis_price_history) < 10:
         price = max(basis_price_history[-1] + random_gauss(0, 0.5), 0)
         basis_price_history.append(price)
         return price
         
-    basis_size_temp = basis_size_history[-9:]
-    basis_size_temp = basis_size_temp[::-1]
-    basis_price_temp = basis_price_history[-10:-1]
+
+    basis_price_temp = basis_price_history[-10:]
     basis_price_temp = basis_price_temp[::-1]
 
     alpha = 0.9  # or get mean of daily interest rate
     discount_factors = [alpha ** i for i in range(10)]
-    weights, overall_price = 0, 0
-
+    overall_price = 0
     for day in range(10):
-        overall_price += basis_size_temp[day] * basis_price_temp[day] * discount_factors[day]
-        weights += basis_size_temp[day] * discount_factors[day]
+        overall_price += basis_price_temp[day] * discount_factors[day]
 
-    until_last_day = random_gauss(overall_price / weights, overall_price // 4 * weights)
-    return (until_last_day + basis_price_history[-1])/2
+    return random_gauss(overall_price, overall_price // 4 * weights)
 
 
 def get_share_token_price():
