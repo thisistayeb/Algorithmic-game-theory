@@ -22,7 +22,7 @@ def add_transaction(first, second, amount, wallet: Wallet):
         if wallet.basis < amount:
             return False
         wallet.basis -= amount
-    transaction_queue.append((first, second, amount, wallet))
+    transaction_queue.append([first, second, amount, wallet])
 
 
 """
@@ -37,7 +37,7 @@ def handle_transactions():
     give order pairs from agents and pay them with a FIFO algorithm.
     """
     prices = get_token_price()  # (basis, share, bond)
-    prices[2] /= prices[0]  # basis -> bond
+    prices = (prices[0], prices[1], prices[2] / prices[0])  # basis -> bond
     """
     prices[2] = usd / bond
     prices[0] = usd / basis

@@ -39,7 +39,7 @@ def issue_bond(wallet, amount, price_per_one):  # create bond and add it to wall
 def pay_share_token_holder(amount):  # pay extra basis token to all share holders
     each_token = amount / share_tokens
     for wallet in wallets:
-        wallet.add_basis(wallet.sharetokens * each_token)
+        wallet.add_basis(wallet.shares * each_token)
 
 
 def create_tokens():
@@ -62,6 +62,8 @@ def redeem_bonds(can_redeem):  # redeem bonds from bond_queue
     while len(bond_queue) > 0 and can_redeem > 0:
         while len(bond_queue) > 0 and bond_queue[0].amount == 0:
             bond_queue.pop(0)
+        if len(bond_queue) == 0:
+            break
         amount = min(bond_queue[0].amount, can_redeem)
         redeem_certain_bond(bond_queue[0], amount)
         can_redeem -= amount
