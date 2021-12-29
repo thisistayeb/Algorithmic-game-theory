@@ -2,7 +2,7 @@ from protocol.treasury import treasury, share_tokens, sum_issued_bonds
 import math
 
 _basis_size_history = []
-_basis_price_history = []
+_basis_price_history = [1]
 
 
 def get_basis_history():
