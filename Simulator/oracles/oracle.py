@@ -29,6 +29,7 @@ def get_basis_price():
     overall_price = 0
     for day in range(10):
         overall_price += basis_price_temp[day] * discount_factors[day]
+        overall_price /= 10
 
     return random_gauss(overall_price, overall_price // 4)
 
