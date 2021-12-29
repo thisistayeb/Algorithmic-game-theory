@@ -9,7 +9,10 @@ class BondLover(Agent):
 
     def action(self):
         prices = get_token_price()  # (basis, share, bond)
-        if self.wallet.usd > 0:
-            self.buy_basis(self.wallet.usd)
-        if self.wallet.basis > 0:
-            self.buy_bond(self.wallet.basis)
+        if prices[0] > 1.2:
+            self.sell_basis(self.wallet.usd // 2)
+        else:
+            if self.wallet.usd > 0:
+                self.buy_basis(self.wallet.usd)
+            if self.wallet.basis > 0:
+                self.buy_bond(self.wallet.basis)

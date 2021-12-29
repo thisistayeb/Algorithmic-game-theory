@@ -8,6 +8,9 @@ class ShareLover(Agent):
         super().__init__(wallet)
 
     def action(self):
+        prices = get_token_price()  # (basis, share, bond)
         if self.wallet.usd > 0:
             self.buy_share(self.wallet.usd)
+        if prices[0] > 1.2:
+            self.sell_basis(self.wallet.basis)
 
