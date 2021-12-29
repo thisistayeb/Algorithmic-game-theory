@@ -25,9 +25,9 @@ def get_basis_price():
         return price
         
     basis_size_temp = basis_size_history[-9:]
-    basis_size_temp = basis_size_temp.reverse()
+    basis_size_temp = basis_size_temp[::-1]
     basis_price_temp = basis_price_history[-10:-1]
-    basis_price_temp = basis_price_temp.reverse()
+    basis_price_temp = basis_price_temp[::-1]
 
     alpha = 0.9  # or get mean of daily interest rate
     discount_factors = [alpha ** i for i in range(10)]
