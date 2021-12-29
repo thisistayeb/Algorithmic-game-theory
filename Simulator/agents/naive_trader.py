@@ -1,4 +1,4 @@
-from agent import Agent
+from agents.agent import Agent
 from oracles.oracle import get_token_price
 from wallet.wallet import Wallet
 

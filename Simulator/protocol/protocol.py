@@ -1,7 +1,7 @@
 # in this file, we do actions of protocol in each time step. (daily action)
-import oracles.oracle as oracle
-import treasury
+from oracles.oracle import get_token_price
 import oracles.exchange as exchange
+from protocol import treasury
 
 
 def action():  # some simple actions are here. TODO
@@ -10,7 +10,7 @@ def action():  # some simple actions are here. TODO
 
 
 def main_action():
-    token_price = oracle.get_token_price()  # (basis, shares, bond)
+    token_price = get_token_price()  # (basis, shares, bond)
     if token_price[0] > 1.1:
         treasury.create_tokens()
     elif token_price[0] < 0.9:

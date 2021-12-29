@@ -1,7 +1,7 @@
+import oracles.oracle
 from assets.bond import Bond
-from oracles.oracle import get_token_price
 from utils.sys_time import current_date, convert_time
-from agents_database import wallets, address_to_wallet
+from protocol.agents_database import wallets, address_to_wallet
 
 # TODO
 """
@@ -19,8 +19,8 @@ expire_days = convert_time(years=5)
 
 def create_bond():  # calculate available bonds for sell to agents
     global available_bonds
-    if get_token_price()[0] < 0.9:  # first element of "get price tuple" is basis
-        amount = ((1 / get_token_price()[0]) - 1) * treasury
+    if oracles.oracle.get_token_price()[0] < 0.9:  # first element of "get price tuple" is basis
+        amount = ((1 / oracles.oracle.get_token_price()[0]) - 1) * treasury
         available_bonds += amount
 
 
@@ -44,8 +44,8 @@ def pay_share_token_holder(amount):  # pay extra basis token to all share holder
 
 def create_tokens():
     global treasury
-    if get_token_price()[0] > 1.1:  # first element of "get price tuple" is basis
-        amount = (get_token_price()[0] - 1) * treasury
+    if oracles.oracle.get_token_price()[0] > 1.1:  # first element of "get price tuple" is basis
+        amount = (oracles.oracle.get_token_price()[0] - 1) * treasury
         treasury += amount
         amount = prone_bond_queue(amount)
         pay_share_token_holder(amount)
