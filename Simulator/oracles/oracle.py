@@ -16,7 +16,6 @@ def get_basis_price():
     """
       "get_basis_history" returns a list of tuples contains (average size, average price) per days
       We assume basis price is depend on last 10 days.
-
     """
     basis_price_history = get_basis_history()
     if len(basis_price_history) < 10:
