@@ -30,7 +30,7 @@ def get_basis_price():
     for day in range(10):
         overall_price += basis_price_temp[day] * discount_factors[day]
 
-    return random_gauss(overall_price, overall_price // 4 * weights)
+    return random_gauss(overall_price, overall_price // 4)
 
 
 def get_share_token_price():
