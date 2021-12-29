@@ -63,7 +63,7 @@ def handle_transactions():
         elif transaction[1] == "bond":  # basis -> bond
             amount = min(available_bonds, transaction[2] / prices[2])
             transaction[2] -= amount
-            issue_bond(transaction[3], amount, prices[2])
+            issue_bond(transaction[3], amount, prices[2])  # catch error from treasury
             if transaction[2] > 0:
                 bond_basis.append((transaction[2], transaction[3]))
         elif transaction[0] == "basis":  # basis -> usd
