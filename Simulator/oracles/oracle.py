@@ -19,7 +19,7 @@ def get_basis_price():
 
     """
     basis_size_history, basis_price_history = get_basis_history()
-    elif len(basis_price_history) < 10:
+    if len(basis_price_history) < 10:
         price = basis_price_history[-1] + random_gauss(0, 0.5)
         basis_price_history.append(price)
         return price
