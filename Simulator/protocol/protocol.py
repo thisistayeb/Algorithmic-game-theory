@@ -7,6 +7,9 @@ import oracles.exchange as exchange
 def action():  # some simple actions are here. TODO
     exchange.handle_transactions()
     exchange.payback_transactions()
+
+
+def main_action():
     token_price = oracle.get_token_price()  # (basis, shares, bond)
     if token_price[0] > 1.1:
         treasury.create_tokens()
