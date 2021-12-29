@@ -3,6 +3,12 @@ from oracles.oracle import get_token_price
 from utils.sys_time import current_date, convert_time
 from agents_database import wallets, address_to_wallet
 
+# TODO
+"""
+add Enum for handling different tokens
+"""
+
+
 treasury = 10 ** 10
 share_tokens = 10 ** 2
 bond_queue = []

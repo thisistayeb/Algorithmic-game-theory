@@ -1,4 +1,5 @@
 from wallet.wallet import Wallet
+from oracles.exchange import add_transaction
 
 
 class Agent:
@@ -6,19 +7,19 @@ class Agent:
         self.wallet = wallet
 
     def buy_basis(self, amount):  # this method can be override by its child
-        self.wallet.add_basis(amount)
+        add_transaction("usd", "basis", amount, self.wallet)
 
     def sell_basis(self, amount):  # this method can be override by its child
-        self.wallet.add_basis(-1 * amount)
+        add_transaction("basis", "usd", amount, self.wallet)
 
     def buy_share(self, amount):  # this method can be override by its child
-        self.wallet.add_share(amount)
+        add_transaction("usd", "share", amount, self.wallet)
 
     def sell_share(self, amount):  # this method can be override by its child
-        self.wallet.add_share(-1 * amount)
+        add_transaction("share", "usd", amount, self.wallet)
 
-    def buy_bond(self, bond):  # this method can be override by its child
-        self.wallet.add_bond(bond)
+    def buy_bond(self, amount):  # this method can be override by its child
+        add_transaction("basis", "bond", amount, self.wallet)
 
     def sell_bond(self):  # this method can be override by its child
         pass
