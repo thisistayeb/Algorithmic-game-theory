@@ -26,7 +26,7 @@ def get_basis_price():
 
     alpha = 0.9  # or get mean of daily interest rate
     discount_factors = [alpha ** i for i in range(10)]
-    weights, overall_price = 0,0
+    weights, overall_price = 1,0
     for day in range(10):
         overall_price += basis_price_temp[day] * discount_factors[day]
         weights *= discount_factors[day]
