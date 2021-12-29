@@ -12,9 +12,9 @@ class NaiveTraderAgent(Agent):
         If Basis price is less than $1, this trader will change all his USDs to Basis tokens
         """
         prices = get_token_price()  # (basis, share, bond)
-        if price[0] == 0 :
+        if price[0] == 1 :
             pass
-        elif prices[0] > 0:
+        elif prices[0] > 1:
             self.sell_basis(self.wallet.basis)
-        elif price[0] < 0:
+        elif price[0] < 1:
             self.buy_basis(self.wallet.usd)
