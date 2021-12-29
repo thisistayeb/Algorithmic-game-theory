@@ -1,5 +1,7 @@
 from agent import Agent
+from oracles.oracle import get_token_price
 from wallet.wallet import Wallet
+
 
 class HungryTraderAgent(Agent):
     def __init__(self, wallet: Wallet):
@@ -11,9 +13,9 @@ class HungryTraderAgent(Agent):
         If Basis price is less than $0.5, this trader will change all his USDs to Basis tokens
         """
         prices = get_token_price()  # (basis, share, bond)
-        if price[0] == 0 :
+        if prices[0] == 0:
             pass
         elif prices[0] > 1.5:
             self.sell_basis(self.wallet.basis)
-        elif price[0] < 0.5:
+        elif prices[0] < 0.5:
             self.buy_basis(self.wallet.usd)
