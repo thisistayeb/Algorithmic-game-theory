@@ -11,7 +11,9 @@ class RandomAgent(Agent):
         random_amount_basis = random.uniform(0, self.wallet.basis)
         random_amount_usd = random.uniform(0, self.wallet.usd)
         random_amount_shares = random.uniform(0, self.wallet.shares)
-        choice = random.choice(["buy_basis", "sell_basis", "sell_share", "buy_share", "buy_bond"])
+        choice = random.choice(
+            ["buy_basis", "sell_basis", "sell_share", "buy_share", "buy_bond"]
+        )
         if choice == "buy_basis":
             self.buy_basis(random_amount_usd)
         if choice == "sell_basis":

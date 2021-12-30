@@ -13,33 +13,34 @@ def get_token_price():
 
 
 def get_basis_price():
-#Basis Price prediction assumes that the price is depend on last 10 days.
+    # Basis Price prediction assumes that the price is depend on last 10 days.
     basis_price_history = get_basis_history()
     if len(basis_price_history) < 10:
-        price = max(basis_price_history[-1] + random_gauss(0, 0.1), random_uniform(0.1,0.5))
+        price = max(
+            basis_price_history[-1] + random_gauss(0, 0.1), random_uniform(0.1, 0.5)
+        )
         basis_price_history.append(price)
         return price
-        
 
     basis_price_temp = basis_price_history[-10:]
     basis_price_temp = basis_price_temp[::-1]
 
     alpha = 0.9  # or get mean of daily interest rate
     discount_factors = [alpha ** i for i in range(10)]
-    weights, overall_price = 1,0
+    weights, overall_price = 1, 0
     for day in range(10):
         overall_price += basis_price_temp[day] * discount_factors[day]
         weights *= discount_factors[day]
-        overall_price /= (10 * weights)
+        overall_price /= 10 * weights
 
     return random_gauss(overall_price, overall_price // 4)
 
 
 def get_share_token_price():
     """
-        Share holders get rewarded when no prior bound exists, and each rewarded equally
+    Share holders get rewarded when no prior bound exists, and each rewarded equally
 
-        define Ratio of debt, wit
+    define Ratio of debt, wit
     """
     basis_price = get_basis_price()
     prior_bond = get_prior_bond_sum()
@@ -48,7 +49,9 @@ def get_share_token_price():
     discount_factor = get_daily_inflation_rate()
 
     minimum_reward = each_token_reward * basis_price
-    maximum_price = minimum_reward / (1 - discount_factor)  # Geometric Series goes to infinity
+    maximum_price = minimum_reward / (
+        1 - discount_factor
+    )  # Geometric Series goes to infinity
     price = random_uniform(minimum_reward, maximum_price)
     ratio = prior_bond / treasury
 

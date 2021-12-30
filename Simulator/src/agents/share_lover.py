@@ -13,4 +13,3 @@ class ShareLover(Agent):
             self.buy_share(self.wallet.usd)
         if prices[0] > 1.2:
             self.sell_basis(self.wallet.basis)
-

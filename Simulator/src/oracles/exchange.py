@@ -46,7 +46,9 @@ def handle_transactions():
 
     for transaction in transaction_queue:
         if transaction[0] == "share":  # share -> usd
-            while (len(share_usd) != 0) and (share_usd[0][0] < 0) and (transaction[2] > 0):
+            while (
+                (len(share_usd) != 0) and (share_usd[0][0] < 0) and (transaction[2] > 0)
+            ):
                 amount = min(abs(share_usd[0][0]), transaction[2])
                 # pay usd to transaction[3]
                 transaction[2] -= amount
@@ -67,7 +69,9 @@ def handle_transactions():
             if transaction[2] > 0:
                 bond_basis.append((transaction[2], transaction[3]))
         elif transaction[0] == "basis":  # basis -> usd
-            while (len(basis_usd) != 0) and (basis_usd[0][0] < 0) and (transaction[2] > 0):
+            while (
+                (len(basis_usd) != 0) and (basis_usd[0][0] < 0) and (transaction[2] > 0)
+            ):
                 amount = min(abs(basis_usd[0][0]), transaction[2])
                 # pay usd to transaction[3]
                 transaction[2] -= amount
@@ -82,7 +86,9 @@ def handle_transactions():
             if transaction[2] > 0:
                 basis_usd.append((transaction[2], transaction[3]))
         elif transaction[1] == "share":  # usd -> share
-            while (len(share_usd) != 0) and (share_usd[0][0] > 0) and (transaction[2] > 0):
+            while (
+                (len(share_usd) != 0) and (share_usd[0][0] > 0) and (transaction[2] > 0)
+            ):
                 amount = min(share_usd[0][0], transaction[2])
                 # pay share to transaction[3]
                 transaction[2] -= amount
@@ -97,7 +103,9 @@ def handle_transactions():
             if transaction[2] > 0:
                 share_usd.append((-transaction[2], transaction[3]))
         elif transaction[1] == "basis":  # usd -> basis
-            while (len(basis_usd) != 0) and (basis_usd[0][0] > 0) and (transaction[2] > 0):
+            while (
+                (len(basis_usd) != 0) and (basis_usd[0][0] > 0) and (transaction[2] > 0)
+            ):
                 amount = min(basis_usd[0][0], transaction[2])
                 # pay basis to transaction[3]
                 transaction[2] -= amount
