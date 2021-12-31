@@ -43,6 +43,40 @@ def handle_transactions():
     prices[0] = usd / basis
     prices[2] / prices[0] = basis / bond
     """
+    basis_demand = [0,0]  # price and size
+    basis_supply = [0,0]
+    share_demand = [0,0]  # price and size
+    share_supply = [0,0]
+
+    for transaction in transaction_queue:
+        if transaction[0] == "usd":
+            if transaction[1] == "basis":  # USD -> basis
+                basis_demand[1] +=  transaction[2]
+                # price save weighted mean using 2 variables
+                price = ((basis_demand[0] * basis_demand[1]) + (transaction[2] * prices[0])) / (basis_demand[1] + transaction[2])
+                basis_demand[0] = price
+            if transaction[1] == "share":
+                share_demand[1] += transaction[2]
+                # price save weighted mean using 2 variables
+                 price = ((share_demand[0] * share_demand[1]) + (transaction[2] * prices[1])) / (share_demand[1] + transaction[2])
+                share_demand[0] = price
+            else:
+                raise ValueError("Illigal transaction")
+        if transaction[0] == "share":
+            if transaction[1] == "usd":
+                share_supply[1] += transaction[2]
+                # price save weighted mean using 2 variables
+                price = ((share_supply[0] * share_supply[1]) + (transaction[2] * prices[1])) / (share_supply[1] + transaction[2])
+                share_supply[0] = price
+            else:
+                raise ValueError("Illigal transaction")
+        if transaction[0] == "basis":
+            if transaction[1] == "usd":
+                basis_supply[1] += transaction[2]
+                # price save weighted mean using 2 variables
+                price = ((basis_supply[0] * basis_supply[1]) + (transaction[2] * prices[0])) / (basis_supply[1] + transaction[2])
+                share_supply[0] = price
+
 
     for transaction in transaction_queue:
         if transaction[0] == "share":  # share -> usd
