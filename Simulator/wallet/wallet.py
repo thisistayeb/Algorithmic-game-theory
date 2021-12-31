@@ -2,12 +2,12 @@ from utils.random_generator import generate_wallet_address
 
 
 class Wallet:
-    def __init__(self, bac=0, bas=0, usd=0, bonds=None):
+    def __init__(self, basis=0, share=0, usd=0, bonds=None):
         if bonds is None:
             bonds = []
         self.address = generate_wallet_address()
-        self.basis = bac
-        self.shares = bas
+        self.basis = basis
+        self.shares = share
         self.usd = usd
         self.bonds = bonds
 
