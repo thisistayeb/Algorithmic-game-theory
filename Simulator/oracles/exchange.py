@@ -6,6 +6,10 @@ transaction_queue = []
 share_usd = []  # positive: share to usd, negative: usd to share, (amount, wallet)
 basis_usd = []  # positive: basis to usd, negative: usd to basis, (amount, wallet)
 bond_basis = []
+basis_supply_trajectory = []  # Save sum of basis's supply and mean price for each hour (price,size)
+basis_demand_trajectory = []  # Save sum of basis's demand and mean price for each hour (price,size)
+share_supply_trajectory = []  # Save sum of share's supply and mean price for each hour (price,size)
+share_demand_trajectory = []  # Save sum of share's demand and mean price for each hour (price,size)
 
 
 # convert amount of first token to second token from wallet
@@ -44,9 +48,9 @@ def handle_transactions():
     prices[2] / prices[0] = basis / bond
     """
     basis_demand = [0,0]  # price and size
-    basis_supply = [0,0]
+    basis_supply = [0,0]  # price and size
     share_demand = [0,0]  # price and size
-    share_supply = [0,0]
+    share_supply = [0,0]  # price and size
 
     for transaction in transaction_queue:
         if transaction[0] == "usd":
@@ -76,6 +80,10 @@ def handle_transactions():
                 # price save weighted mean using 2 variables
                 price = ((basis_supply[0] * basis_supply[1]) + (transaction[2] * prices[0])) / (basis_supply[1] + transaction[2])
                 share_supply[0] = price
+    basis_demand_trajectory.append(basis_demand)
+    basis_supply_trajectory.append(basis_supply)
+    share_demand_trajectory.append(share_demand)
+    share_supply_trajectory.append(share_supply)
 
 
     for transaction in transaction_queue:
