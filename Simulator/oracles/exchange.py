@@ -77,7 +77,7 @@ def handle_transactions():
                 ) / (share_demand[1] + transaction[2])
                 share_demand[0] = price
             else:
-                raise ValueError("Illigal transaction")
+                raise ValueError("Illegal transaction")
         if transaction[0] == "share":
             if transaction[1] == "usd":
                 share_supply[1] += transaction[2]
@@ -87,7 +87,7 @@ def handle_transactions():
                 ) / (share_supply[1] + transaction[2])
                 share_supply[0] = price
             else:
-                raise ValueError("Illigal transaction")
+                raise ValueError("Illegal transaction")
         if transaction[0] == "basis":
             if transaction[1] == "usd":
                 basis_supply[1] += transaction[2]
