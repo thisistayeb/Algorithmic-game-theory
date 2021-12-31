@@ -63,39 +63,41 @@ def handle_transactions():
     for transaction in transaction_queue:
         if transaction[0] == "usd":
             if transaction[1] == "basis":  # USD -> basis
-                basis_demand[1] += transaction[2]
                 # price save weighted mean using 2 variables
                 price = (
                     (basis_demand[0] * basis_demand[1]) + (transaction[2] * prices[0])
                 ) / (basis_demand[1] + transaction[2])
                 basis_demand[0] = price
+                basis_demand[1] += transaction[2]
             if transaction[1] == "share":
-                share_demand[1] += transaction[2]
                 # price save weighted mean using 2 variables
                 price = (
                     (share_demand[0] * share_demand[1]) + (transaction[2] * prices[1])
                 ) / (share_demand[1] + transaction[2])
                 share_demand[0] = price
+                share_demand[1] += transaction[2]
+
             else:
                 raise ValueError("Illegal transaction")
         if transaction[0] == "share":
             if transaction[1] == "usd":
-                share_supply[1] += transaction[2]
                 # price save weighted mean using 2 variables
                 price = (
                     (share_supply[0] * share_supply[1]) + (transaction[2] * prices[1])
                 ) / (share_supply[1] + transaction[2])
                 share_supply[0] = price
+                share_supply[1] += transaction[2]
+
             else:
                 raise ValueError("Illegal transaction")
         if transaction[0] == "basis":
             if transaction[1] == "usd":
-                basis_supply[1] += transaction[2]
                 # price save weighted mean using 2 variables
                 price = (
                     (basis_supply[0] * basis_supply[1]) + (transaction[2] * prices[0])
                 ) / (basis_supply[1] + transaction[2])
-                share_supply[0] = price
+                basis_supply[0] = price
+                basis_supply[1] += transaction[2]
     basis_demand_trajectory.append(basis_demand)
     basis_supply_trajectory.append(basis_supply)
     share_demand_trajectory.append(share_demand)
