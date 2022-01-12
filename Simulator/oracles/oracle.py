@@ -1,15 +1,26 @@
 # we can create a class for oracles.
 from utils.random_generator import random_gauss, random_uniform
 from oracles.token_stat import *
+from utils.sys_time import current_date
+
+last_date = -1
+last_prices = [0, 0, 0]
 
 
 def get_token_price():
+    global last_date, last_prices
+    cur_date = current_date()
+    if cur_date == last_date:
+        return last_prices
     # returns a tuple which contains token prices (basis, shares, bond)
     basis_price = get_basis_price()
     share_token_price = get_share_token_price()
     bond_price = get_bond_price()
 
-    return basis_price, share_token_price, bond_price
+    last_date = cur_date
+    last_prices = [basis_price, share_token_price, bond_price]
+
+    return last_prices
 
 
 def get_basis_price():
