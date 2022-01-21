@@ -2,6 +2,7 @@
 from utils.random_generator import random_gauss, random_uniform
 from oracles.token_stat import *
 from utils.sys_time import current_date
+from protocol.treasury import available_bonds, treasury
 from oracles.exchange import (
     basis_supply_trajectory,
     basis_demand_trajectory,
@@ -96,3 +97,9 @@ def get_bond_price():
         return (alpha ** expected_days_to_redeem) * basis_price
     else:
         return 0
+
+def get_prior_bond_sum():
+    return available_bonds
+
+def get_treasury():
+    return treasury
