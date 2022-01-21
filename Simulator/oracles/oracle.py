@@ -2,6 +2,12 @@
 from utils.random_generator import random_gauss, random_uniform
 from oracles.token_stat import *
 from utils.sys_time import current_date
+from oracles.exchange import (
+    basis_supply_trajectory,
+    basis_demand_trajectory,
+    share_supply_trajectory,
+    share_demand_trajectory,
+)
 
 last_date = -1
 last_prices = [0, 0, 0]
@@ -24,54 +30,37 @@ def get_token_price():
 
 
 def get_basis_price():
-    # Basis Price prediction assumes that the price is depend on last 10 days.
-    basis_price_history = get_basis_history()
-    if len(basis_price_history) < 10:
-        price = max(
-            basis_price_history[-1] + random_gauss(0, 0.1), random_uniform(0.1, 0.5)
-        )
-        basis_price_history.append(price)
-        return price
+    global basis_supply_trajectory
+    global basis_demand_trajectory
 
-    basis_price_temp = basis_price_history[-10:]
-    basis_price_temp = basis_price_temp[::-1]
+    basis_demand_price = basis_demand_trajectory[-1][0]
+    basis_demand_size = basis_demand_trajectory[-1][1]
+    basis_supply_price = basis_supply_trajectory[-1][0]
+    basis_supply_size = basis_supply_trajectory[-1][1]
 
-    alpha = 0.9  # or get mean of daily interest rate
-    discount_factors = [alpha ** i for i in range(10)]
-    weights, overall_price = 1, 0
-    for day in range(10):
-        overall_price += basis_price_temp[day] * discount_factors[day]
-        weights *= discount_factors[day]
-        overall_price /= 10 * weights
+    price = (
+        (basis_demand_price * basis_demand_size)
+        + (basis_supply_price * basis_supply_size)
+    ) / (basis_supply_size + basis_demand_size)
 
-    return random_gauss(overall_price, overall_price // 4)
+    return price
 
 
 def get_share_token_price():
-    """
-    Share holders get rewarded when no prior bound exists, and each rewarded equally
+    global share_supply_trajectory
+    global share_demand_trajectory
 
-    define Ratio of debt, wit
-    """
-    basis_price = get_basis_price()
-    prior_bond = get_prior_bond_sum()
-    treasury = get_treasury()
-    each_token_reward = get_each_basis_reward()
-    discount_factor = get_daily_inflation_rate()
+    share_demand_price = share_demand_trajectory[-1][0]
+    share_demand_size = share_demand_trajectory[-1][1]
+    share_supply_price = share_supply_trajectory[-1][0]
+    share_supply_size = share_supply_trajectory[-1][1]
 
-    minimum_reward = each_token_reward * basis_price
-    maximum_price = minimum_reward / (
-        1 - discount_factor
-    )  # Geometric Series goes to infinity
-    price = random_uniform(minimum_reward, maximum_price)
-    ratio = prior_bond / treasury
+    price = (
+        (share_demand_price * share_demand_size)
+        + (share_supply_price * share_supply_size)
+    ) / (share_supply_size + share_demand_size)
 
-    expected_to_rewarded = 1 - ratio  # honestly, linear expectation for no reason
-
-    if ratio > 1:
-        return 0
-    else:
-        return expected_to_rewarded * price
+    return price
 
 
 def get_bond_price():
