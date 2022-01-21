@@ -98,8 +98,10 @@ def get_bond_price():
     else:
         return 0
 
+
 def get_prior_bond_sum():
     return available_bonds
+
 
 def get_treasury():
     return treasury
