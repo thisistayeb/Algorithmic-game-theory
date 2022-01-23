@@ -1,7 +1,9 @@
+import oracles.oracle
 from wallet.wallet import Wallet
 import oracles.oracle as oracle
 import oracles.token_stat as token_stat
 from protocol.treasury import available_bonds, issue_bond
+import numpy as np
 
 
 transaction_queue = []
@@ -112,10 +114,10 @@ def handle_transactions():
             while (
                     (len(share_usd) != 0) and (share_usd[0][0] < 0) and (transaction[2] > 0)
             ):
-                amount = min(abs(share_usd[0][0]), transaction[2])
+                amount = min(abs(share_usd[0][0]), transaction[2] * prices[1])  # amount in dollars
                 # pay usd to transaction[3]
-                transaction[2] -= amount
-                transaction[3].add_usd(amount * prices[1])
+                transaction[2] -= amount / prices[1]
+                transaction[3].add_usd(amount)
                 # pay share to share_usd[0][1]
                 share_usd[0][0] += amount
                 share_usd[0][1].add_share(amount / prices[1])
@@ -125,7 +127,7 @@ def handle_transactions():
 
             if transaction[2] > 0:
                 share_usd.append([transaction[2], transaction[3]])
-        elif transaction[1] == "bond":  # basis -> bond
+        elif transaction[1] == "bond":  # basis -> bond # TODO
             amount = min(available_bonds, transaction[2] / prices[2])
             transaction[2] -= amount
             issue_bond(transaction[3], amount, prices[2])  # catch error from treasury
@@ -135,10 +137,10 @@ def handle_transactions():
             while (
                     (len(basis_usd) != 0) and (basis_usd[0][0] < 0) and (transaction[2] > 0)
             ):
-                amount = min(abs(basis_usd[0][0]), transaction[2])
+                amount = min(abs(basis_usd[0][0]), transaction[2] * prices[0])
                 # pay usd to transaction[3]
-                transaction[2] -= amount
-                transaction[3].add_usd(amount * prices[0])
+                transaction[2] -= amount / prices[0]
+                transaction[3].add_usd(amount)
                 # pay basis to basis_usd[0][1]
                 basis_usd[0][0] += amount
                 basis_usd[0][1].add_basis(amount / prices[0])
@@ -152,13 +154,13 @@ def handle_transactions():
             while (
                     (len(share_usd) != 0) and (share_usd[0][0] > 0) and (transaction[2] > 0)
             ):
-                amount = min(share_usd[0][0], transaction[2])
+                amount = min(share_usd[0][0] * prices[1], transaction[2])
                 # pay share to transaction[3]
                 transaction[2] -= amount
                 transaction[3].add_share(amount / prices[1])
                 # pay usd to share_usd[0][1]
-                share_usd[0][0] -= amount
-                share_usd[0][1].add_usd(amount * prices[1])
+                share_usd[0][0] -= amount / prices[1]
+                share_usd[0][1].add_usd(amount)
                 # remove transaction from queue if needed
                 if share_usd[0][0] == 0:
                     share_usd.pop(0)
@@ -169,13 +171,13 @@ def handle_transactions():
             while (
                     (len(basis_usd) != 0) and (basis_usd[0][0] > 0) and (transaction[2] > 0)
             ):
-                amount = min(basis_usd[0][0], transaction[2])
+                amount = min(basis_usd[0][0] * prices[0], transaction[2])
                 # pay basis to transaction[3]
                 transaction[2] -= amount
                 transaction[3].add_basis(amount / prices[0])
                 # pay usd to basis_usd[0][1]
-                basis_usd[0][0] -= amount
-                basis_usd[0][1].add_usd(amount * prices[0])
+                basis_usd[0][0] -= amount / prices[0]
+                basis_usd[0][1].add_usd(amount)
                 # remove transaction from queue if needed
                 if basis_usd[0][0] == 0:
                     basis_usd.pop(0)
@@ -208,6 +210,9 @@ def payback_transactions():
     for transaction in bond_basis:
         if transaction[0] != 0:
             transaction[1].add_basis(transaction[0])
+
+    # if len(basis_usd) > 0:
+    #     print(np.sum(np.asarray(basis_usd)[:, 0]))
 
     share_usd.clear()
     basis_usd.clear()
