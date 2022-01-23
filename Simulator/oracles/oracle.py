@@ -1,17 +1,26 @@
 # we can create a class for oracles.
-from utils.random_generator import random_gauss, random_uniform
 from oracles.token_stat import *
 from utils.sys_time import current_date
 from protocol.treasury import available_bonds, treasury
-from oracles.exchange import (
-    basis_supply_trajectory,
-    basis_demand_trajectory,
-    share_supply_trajectory,
-    share_demand_trajectory,
-)
-
+import oracles.exchange as ex
 last_date = -1
 last_prices = [0, 0, 0]
+
+
+def share_supply_trajectory():
+    return ex.share_supply_trajectory
+
+
+def share_demand_trajectory():
+    return ex.share_demand_trajectory
+
+
+def basis_supply_trajectory():
+    return ex.basis_supply_trajectory
+
+
+def basis_demand_trajectory():
+    return ex.basis_demand_trajectory
 
 
 def get_token_price():
@@ -31,13 +40,13 @@ def get_token_price():
 
 
 def get_basis_price():
-    global basis_supply_trajectory
-    global basis_demand_trajectory
+    basis_supply_tr = basis_supply_trajectory()
+    basis_demand_tr = basis_demand_trajectory()
 
-    basis_demand_price = basis_demand_trajectory[-1][0]
-    basis_demand_size = basis_demand_trajectory[-1][1]
-    basis_supply_price = basis_supply_trajectory[-1][0]
-    basis_supply_size = basis_supply_trajectory[-1][1]
+    basis_demand_price = basis_demand_tr[-1][0]
+    basis_demand_size = basis_demand_tr[-1][1]
+    basis_supply_price = basis_supply_tr[-1][0]
+    basis_supply_size = basis_supply_tr[-1][1]
 
     price = (
         (basis_demand_price * basis_demand_size)
@@ -48,13 +57,13 @@ def get_basis_price():
 
 
 def get_share_token_price():
-    global share_supply_trajectory
-    global share_demand_trajectory
+    share_supply_tr = share_supply_trajectory()
+    share_demand_tr = share_demand_trajectory()
 
-    share_demand_price = share_demand_trajectory[-1][0]
-    share_demand_size = share_demand_trajectory[-1][1]
-    share_supply_price = share_supply_trajectory[-1][0]
-    share_supply_size = share_supply_trajectory[-1][1]
+    share_demand_price = share_demand_tr[-1][0]
+    share_demand_size = share_demand_tr[-1][1]
+    share_supply_price = share_supply_tr[-1][0]
+    share_supply_size = share_supply_tr[-1][1]
 
     price = (
         (share_demand_price * share_demand_size)
