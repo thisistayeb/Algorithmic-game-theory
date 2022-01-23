@@ -90,10 +90,13 @@ def handle_transactions():
                 ) / (basis_supply[1] + transaction[2])
                 basis_supply[0] = price
                 basis_supply[1] += transaction[2]
-    basis_demand_trajectory.append(basis_demand)
-    basis_supply_trajectory.append(basis_supply)
-    share_demand_trajectory.append(share_demand)
-    share_supply_trajectory.append(share_supply)
+        basis_demand_trajectory.append(basis_demand)
+        basis_supply_trajectory.append(basis_supply)
+        share_demand_trajectory.append(share_demand)
+        share_supply_trajectory.append(share_supply)
+    print(f'basis_supply_trajectory: {str(basis_supply_trajectory[-1])}\n')
+    print(f'basis_demand_trajectory: {str(basis_demand_trajectory[-1])}\n')
+
 
     for transaction in transaction_queue:
         if transaction[0] == "share":  # share -> usd
@@ -179,6 +182,7 @@ def payback_transactions():
     after paying transactions, some transactions will be canceled
     and payed tokens will returns to agent's wallets
     """
+    # print("starting paybacks")
     for transaction in share_usd:
         if transaction[0] > 0:
             transaction[1].add_share(transaction[0])
