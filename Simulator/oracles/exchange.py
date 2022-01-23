@@ -1,15 +1,15 @@
 from wallet.wallet import Wallet
-from oracles.oracle import get_token_price
+import oracles.oracle as oracle
 from protocol.treasury import available_bonds, issue_bond
 
 transaction_queue = []
 share_usd = []  # positive: share to usd, negative: usd to share, (amount, wallet)
 basis_usd = []  # positive: basis to usd, negative: usd to basis, (amount, wallet)
 bond_basis = []
-basis_supply_trajectory = [(0,0)]  # Save sum of basis's supply and mean price for each hour (price,size)
-basis_demand_trajectory = [(0,0)]  # Save sum of basis's demand and mean price for each hour (price,size)
-share_supply_trajectory = [(0,0)]  # Save sum of share's supply and mean price for each hour (price,size)
-share_demand_trajectory = [(0,0)]  # Save sum of share's demand and mean price for each hour (price,size)
+basis_supply_trajectory = [[1,1],[1,1]]  # Save sum of basis's supply and mean price for each hour (price,size)
+basis_demand_trajectory = [[1,1],[1,1]]  # Save sum of basis's demand and mean price for each hour (price,size)
+share_supply_trajectory = [[1,1],[1,1]]  # Save sum of share's supply and mean price for each hour (price,size)
+share_demand_trajectory = [[1,1],[1,1]]  # Save sum of share's demand and mean price for each hour (price,size)
 
 
 # convert amount of first token to second token from wallet
@@ -40,7 +40,7 @@ def handle_transactions():
     """
     give order pairs from agents and pay them with a FIFO algorithm.
     """
-    prices = get_token_price()  # (basis, share, bond)
+    prices = oracle.get_token_price()  # (basis, share, bond)
     prices = (prices[0], prices[1], prices[2] / prices[0])  # basis -> bond
     """
     prices[2] = usd / bond

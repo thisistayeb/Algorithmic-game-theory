@@ -4,7 +4,7 @@ from utils.sys_time import current_date
 from protocol.treasury import available_bonds, treasury
 import oracles.exchange as ex
 last_date = -1
-last_prices = [0, 0, 0]
+last_prices = [1, 1, 1]
 
 
 def share_supply_trajectory():
@@ -42,11 +42,14 @@ def get_token_price():
 def get_basis_price():
     basis_supply_tr = basis_supply_trajectory()
     basis_demand_tr = basis_demand_trajectory()
-
+    
     basis_demand_price = basis_demand_tr[-1][0]
     basis_demand_size = basis_demand_tr[-1][1]
     basis_supply_price = basis_supply_tr[-1][0]
     basis_supply_size = basis_supply_tr[-1][1]
+
+    if basis_demand_size == 0 or basis_supply_size == 0:
+        return 1
 
     price = (
         (basis_demand_price * basis_demand_size)
@@ -64,6 +67,9 @@ def get_share_token_price():
     share_demand_size = share_demand_tr[-1][1]
     share_supply_price = share_supply_tr[-1][0]
     share_supply_size = share_supply_tr[-1][1]
+
+    if share_demand_size == 0 or share_supply_size == 0:
+        return 1
 
     price = (
         (share_demand_price * share_demand_size)
