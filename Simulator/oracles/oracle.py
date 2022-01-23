@@ -55,7 +55,7 @@ def get_basis_price():
     #     (basis_demand_price * basis_demand_size)
     #     + (basis_supply_price * basis_supply_size)
     # ) / (basis_supply_size + basis_demand_size)
-    price = basis_demand_price / basis_supply_size
+    price = basis_demand_size / basis_supply_size
 
     return price
 
