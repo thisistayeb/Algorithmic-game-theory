@@ -1,5 +1,6 @@
 from wallet.wallet import Wallet
 import oracles.oracle as oracle
+import oracles.token_stat as token_stat
 from protocol.treasury import available_bonds, issue_bond
 
 
@@ -47,7 +48,6 @@ def handle_transactions():
     prices = (prices[0], prices[1], prices[2] / prices[0])  # basis -> bond
     # prices = (prices[0], prices[1], prices[2])  # basis -> bond
 
-    global basis_price_history
     """
     prices[2] = usd / bond
     prices[0] = usd / basis
@@ -184,7 +184,7 @@ def handle_transactions():
                 basis_usd.append([-transaction[2], transaction[3]])
 
     transaction_queue.clear()
-    basis_price_history.append(oracle.get_token_price()[0])
+    token_stat.basis_price_history.append(oracle.get_token_price()[0])
 
 
 def payback_transactions():
