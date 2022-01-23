@@ -9,7 +9,7 @@ add Enum for handling different tokens
 """
 
 
-treasury = 10 ** 10
+treasury = 10 ** 4
 share_tokens = 10 ** 2
 bond_queue = []
 available_bonds = 0

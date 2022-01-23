@@ -1,16 +1,16 @@
 from wallet.wallet import Wallet
 import oracles.oracle as oracle
 from protocol.treasury import available_bonds, issue_bond
-from oracles.token_stat import basis_price_history
+
 
 transaction_queue = []
 share_usd = []  # positive: share to usd, negative: usd to share, (amount, wallet)
 basis_usd = []  # positive: basis to usd, negative: usd to basis, (amount, wallet)
 bond_basis = []
-basis_supply_trajectory = [[1,1],[1,1]]  # Save sum of basis's supply and mean price for each hour (price,size)
-basis_demand_trajectory = [[1,1],[1,1]]  # Save sum of basis's demand and mean price for each hour (price,size)
-share_supply_trajectory = [[1,1],[1,1]]  # Save sum of share's supply and mean price for each hour (price,size)
-share_demand_trajectory = [[1,1],[1,1]]  # Save sum of share's demand and mean price for each hour (price,size)
+basis_supply_trajectory = [[1, 1], [1, 1]]  # Save sum of basis's supply and mean price for each hour (price,size)
+basis_demand_trajectory = [[1, 1], [1, 1]]  # Save sum of basis's demand and mean price for each hour (price,size)
+share_supply_trajectory = [[1, 1], [1, 1]]  # Save sum of share's supply and mean price for each hour (price,size)
+share_demand_trajectory = [[1, 1], [1, 1]]  # Save sum of share's demand and mean price for each hour (price,size)
 
 
 # convert amount of first token to second token from wallet
@@ -38,12 +38,14 @@ basis -> bond
 
 
 def handle_transactions():
+    # asnp = np.asarray(transaction_queue)
+    # print(asnp[:, :3])
     """
     give order pairs from agents and pay them with a FIFO algorithm.
     """
     prices = oracle.get_token_price()  # (basis, share, bond)
-    # prices = (prices[0], prices[1], prices[2] / prices[0])  # basis -> bond
-    prices = (prices[0], prices[1], prices[2])  # basis -> bond
+    prices = (prices[0], prices[1], prices[2] / prices[0])  # basis -> bond
+    # prices = (prices[0], prices[1], prices[2])  # basis -> bond
 
     global basis_price_history
     """
@@ -51,26 +53,26 @@ def handle_transactions():
     prices[0] = usd / basis
     prices[2] / prices[0] = basis / bond
     """
-    basis_demand = [0, 0]  # price and size
-    basis_supply = [0, 0]  # price and size
-    share_demand = [0, 0]  # price and size
-    share_supply = [0, 0]  # price and size
+    basis_demand = [1, 1]  # price and size
+    basis_supply = [1, 1]  # price and size
+    share_demand = [1, 1]  # price and size
+    share_supply = [1, 1]  # price and size
 
     for transaction in transaction_queue:
         if transaction[0] == "usd":
             if transaction[1] == "basis":  # USD -> basis
                 # price save weighted mean using 2 variables
                 price = (
-                    (basis_demand[0] * basis_demand[1]) + (transaction[2] * prices[0])
-                ) / (basis_demand[1] + transaction[2])
+                                (basis_demand[0] * basis_demand[1]) + (transaction[2] * prices[0])
+                        ) / (basis_demand[1] + transaction[2])
                 # price = oracle.get_token_price()[0]
                 basis_demand[0] = price
                 basis_demand[1] += transaction[2]
             elif transaction[1] == "share":  # USD -> share
                 # price save weighted mean using 2 variables
                 price = (
-                    (share_demand[0] * share_demand[1]) + (transaction[2] * prices[1])
-                ) / (share_demand[1] + transaction[2])
+                                (share_demand[0] * share_demand[1]) + (transaction[2] * prices[1])
+                        ) / (share_demand[1] + transaction[2])
                 # price = oracle.get_token_price()[1]
                 share_demand[0] = price
                 share_demand[1] += transaction[2]
@@ -81,8 +83,8 @@ def handle_transactions():
             if transaction[1] == "usd":  # share -> USD
                 # price save weighted mean using 2 variables
                 price = (
-                    (share_supply[0] * share_supply[1]) + (transaction[2] * prices[1])
-                ) / (share_supply[1] + transaction[2])
+                                (share_supply[0] * share_supply[1]) + (transaction[2] * prices[1])
+                        ) / (share_supply[1] + transaction[2])
                 # price = oracle.get_token_price()[1]
                 share_supply[0] = price
                 share_supply[1] += transaction[2]
@@ -93,8 +95,8 @@ def handle_transactions():
             if transaction[1] == "usd":  # basis -> USD
                 # price save weighted mean using 2 variables
                 price = (
-                    (basis_supply[0] * basis_supply[1]) + (transaction[2] * prices[0])
-                ) / (basis_supply[1] + transaction[2])
+                                (basis_supply[0] * basis_supply[1]) + (transaction[2] * prices[0])
+                        ) / max(0.1, (basis_supply[1] + transaction[2]))
                 # price = oracle.get_token_price()[0]
                 basis_supply[0] = price
                 basis_supply[1] += transaction[2]
@@ -105,11 +107,10 @@ def handle_transactions():
 
     print(f"Basis prices is {oracle.get_token_price()[0]}")
 
-
     for transaction in transaction_queue:
         if transaction[0] == "share":  # share -> usd
             while (
-                (len(share_usd) != 0) and (share_usd[0][0] < 0) and (transaction[2] > 0)
+                    (len(share_usd) != 0) and (share_usd[0][0] < 0) and (transaction[2] > 0)
             ):
                 amount = min(abs(share_usd[0][0]), transaction[2])
                 # pay usd to transaction[3]
@@ -132,7 +133,7 @@ def handle_transactions():
                 bond_basis.append([transaction[2], transaction[3]])
         elif transaction[0] == "basis":  # basis -> usd
             while (
-                (len(basis_usd) != 0) and (basis_usd[0][0] < 0) and (transaction[2] > 0)
+                    (len(basis_usd) != 0) and (basis_usd[0][0] < 0) and (transaction[2] > 0)
             ):
                 amount = min(abs(basis_usd[0][0]), transaction[2])
                 # pay usd to transaction[3]
@@ -149,7 +150,7 @@ def handle_transactions():
                 basis_usd.append([transaction[2], transaction[3]])
         elif transaction[1] == "share":  # usd -> share
             while (
-                (len(share_usd) != 0) and (share_usd[0][0] > 0) and (transaction[2] > 0)
+                    (len(share_usd) != 0) and (share_usd[0][0] > 0) and (transaction[2] > 0)
             ):
                 amount = min(share_usd[0][0], transaction[2])
                 # pay share to transaction[3]
@@ -166,7 +167,7 @@ def handle_transactions():
                 share_usd.append([-transaction[2], transaction[3]])
         elif transaction[1] == "basis":  # usd -> basis
             while (
-                (len(basis_usd) != 0) and (basis_usd[0][0] > 0) and (transaction[2] > 0)
+                    (len(basis_usd) != 0) and (basis_usd[0][0] > 0) and (transaction[2] > 0)
             ):
                 amount = min(basis_usd[0][0], transaction[2])
                 # pay basis to transaction[3]
