@@ -1,6 +1,7 @@
 from wallet.wallet import Wallet
 import oracles.oracle as oracle
 from protocol.treasury import available_bonds, issue_bond
+from oracles.token_stat import basis_price_history
 
 transaction_queue = []
 share_usd = []  # positive: share to usd, negative: usd to share, (amount, wallet)
@@ -41,7 +42,10 @@ def handle_transactions():
     give order pairs from agents and pay them with a FIFO algorithm.
     """
     prices = oracle.get_token_price()  # (basis, share, bond)
-    prices = (prices[0], prices[1], prices[2] / prices[0])  # basis -> bond
+    # prices = (prices[0], prices[1], prices[2] / prices[0])  # basis -> bond
+    prices = (prices[0], prices[1], prices[2])  # basis -> bond
+
+    global basis_price_history
     """
     prices[2] = usd / bond
     prices[0] = usd / basis
@@ -59,6 +63,7 @@ def handle_transactions():
                 price = (
                     (basis_demand[0] * basis_demand[1]) + (transaction[2] * prices[0])
                 ) / (basis_demand[1] + transaction[2])
+                # price = oracle.get_token_price()[0]
                 basis_demand[0] = price
                 basis_demand[1] += transaction[2]
             elif transaction[1] == "share":  # USD -> share
@@ -66,6 +71,7 @@ def handle_transactions():
                 price = (
                     (share_demand[0] * share_demand[1]) + (transaction[2] * prices[1])
                 ) / (share_demand[1] + transaction[2])
+                # price = oracle.get_token_price()[1]
                 share_demand[0] = price
                 share_demand[1] += transaction[2]
 
@@ -77,6 +83,7 @@ def handle_transactions():
                 price = (
                     (share_supply[0] * share_supply[1]) + (transaction[2] * prices[1])
                 ) / (share_supply[1] + transaction[2])
+                # price = oracle.get_token_price()[1]
                 share_supply[0] = price
                 share_supply[1] += transaction[2]
 
@@ -88,14 +95,15 @@ def handle_transactions():
                 price = (
                     (basis_supply[0] * basis_supply[1]) + (transaction[2] * prices[0])
                 ) / (basis_supply[1] + transaction[2])
+                # price = oracle.get_token_price()[0]
                 basis_supply[0] = price
                 basis_supply[1] += transaction[2]
         basis_demand_trajectory.append(basis_demand)
         basis_supply_trajectory.append(basis_supply)
         share_demand_trajectory.append(share_demand)
         share_supply_trajectory.append(share_supply)
-    print(f'basis_supply_trajectory: {str(basis_supply_trajectory[-1])}\n')
-    print(f'basis_demand_trajectory: {str(basis_demand_trajectory[-1])}\n')
+
+    print(f"Basis prices is {oracle.get_token_price()[0]}")
 
 
     for transaction in transaction_queue:
@@ -175,6 +183,7 @@ def handle_transactions():
                 basis_usd.append([-transaction[2], transaction[3]])
 
     transaction_queue.clear()
+    basis_price_history.append(oracle.get_token_price()[0])
 
 
 def payback_transactions():
