@@ -1,8 +1,9 @@
 # we can create a class for oracles.
 from oracles.token_stat import *
 from utils.sys_time import current_date
-from protocol.treasury import available_bonds, treasury
+import protocol.treasury as main_treasury
 import oracles.exchange as ex
+
 last_date = -1
 last_prices = [1, 1]
 
@@ -42,7 +43,7 @@ def get_token_price():
 def get_basis_price():
     basis_supply_tr = basis_supply_trajectory()
     basis_demand_tr = basis_demand_trajectory()
-    
+
     basis_demand_price = basis_demand_tr[-1][0]
     basis_demand_size = basis_demand_tr[-1][1]
     basis_supply_price = basis_supply_tr[-1][0]
@@ -68,8 +69,7 @@ def get_share_token_price():
     if share_demand_size == 0 or share_supply_size == 0:
         return 1
 
-
-    price = share_demand_size / share_supply_size 
+    price = share_demand_size / share_supply_size
     return max(price, 0.1)
 
 
@@ -109,8 +109,8 @@ def get_bond_price():
 
 
 def get_prior_bond_sum():
-    return available_bonds
+    return main_treasury.available_bonds
 
 
 def get_treasury():
-    return treasury
+    return main_treasury.treasury

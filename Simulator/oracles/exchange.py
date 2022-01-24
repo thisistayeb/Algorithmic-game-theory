@@ -2,7 +2,8 @@ import oracles.oracle
 from wallet.wallet import Wallet
 import oracles.oracle as oracle
 import oracles.token_stat as token_stat
-from protocol.treasury import available_bonds, issue_bond
+import protocol.treasury as treasury
+from protocol.treasury import issue_bond
 import numpy as np
 
 
@@ -18,6 +19,8 @@ share_demand_trajectory = [[1, 1], [1, 1]]  # Save sum of share's demand and mea
 
 # convert amount of first token to second token from wallet
 def add_transaction(first, second, amount, wallet: Wallet):
+    if amount < 1e-8:
+        return False
     if first == "usd":
         if wallet.usd < amount:
             return False
@@ -123,7 +126,7 @@ def handle_transactions():
             if transaction[2] > 0:
                 share_usd.append([transaction[2], transaction[3]])
         elif transaction[1] == "bond":  # basis -> bond # TODO
-            amount = min(available_bonds, transaction[2] / prices[2])
+            amount = min(treasury.available_bonds, transaction[2] / prices[2])
             transaction[2] -= amount
             issue_bond(transaction[3], amount, prices[2])  # catch error from treasury
             if transaction[2] > 0:

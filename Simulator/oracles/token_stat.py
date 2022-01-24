@@ -1,7 +1,7 @@
-from protocol.treasury import treasury, share_tokens, sum_issued_bonds
+import protocol.treasury as main_treasury
 import math
 
-basis_price_history = [1,1]
+basis_price_history = [1, 1]
 
 
 def get_basis_history():
@@ -9,13 +9,13 @@ def get_basis_history():
 
 
 def get_prior_bond_sum():
-    return sum_issued_bonds
+    return main_treasury.sum_issued_bonds
 
 
 def get_each_basis_reward():
     basis_price = basis_price_history[-1]
     if basis_price > 1:
-        return ((1 - basis_price) * treasury) / share_tokens
+        return ((1 - basis_price) * main_treasury.treasury) / main_treasury.share_tokens
     else:
         return 0
 
@@ -27,4 +27,4 @@ def get_daily_inflation_rate():
 
 
 def get_treasury():
-    return treasury
+    return main_treasury.treasury
