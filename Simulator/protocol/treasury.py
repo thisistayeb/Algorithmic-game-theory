@@ -1,4 +1,4 @@
-import oracles.oracle
+import oracles
 from assets.bond import Bond
 from utils.sys_time import current_date, convert_time
 from protocol.agents_database import wallets, address_to_wallet
@@ -23,10 +23,14 @@ def create_bond():  # calculate available bonds for sell to agents
         oracles.oracle.get_token_price()[0] < 0.9
     ):  # first element of "get price tuple" is basis
         amount = ((1 / oracles.oracle.get_token_price()[0]) - 1) * treasury
-        available_bonds += amount
+        available_bonds = amount
+    elif oracles.oracle.get_token_price()[0] > 1:
+        available_bonds = 0
 
 
 def issue_bond(wallet, amount, price_per_one):  # create bond and add it to wallet
+    if amount == 0:
+        return
     global treasury, sum_issued_bonds, available_bonds
     if amount > available_bonds:
         raise "Currently, there are not enough bonds available"
