@@ -48,7 +48,6 @@ def handle_transactions():
     """
     prices = oracle.get_token_price()  # (basis, share, bond)
     prices = (prices[0], prices[1], prices[2] / prices[0])  # basis -> bond
-    # prices = (prices[0], prices[1], prices[2])  # basis -> bond
 
     """
     prices[2] = usd / bond
@@ -67,7 +66,6 @@ def handle_transactions():
                 price = (
                                 (basis_demand[0] * basis_demand[1]) + (transaction[2] * prices[0])
                         ) / (basis_demand[1] + transaction[2])
-                # price = oracle.get_token_price()[0]
                 basis_demand[0] = price
                 basis_demand[1] += transaction[2]
             elif transaction[1] == "share":  # USD -> share
@@ -75,7 +73,6 @@ def handle_transactions():
                 price = (
                                 (share_demand[0] * share_demand[1]) + (transaction[2] * prices[1])
                         ) / (share_demand[1] + transaction[2])
-                # price = oracle.get_token_price()[1]
                 share_demand[0] = price
                 share_demand[1] += transaction[2]
 
@@ -87,7 +84,6 @@ def handle_transactions():
                 price = (
                                 (share_supply[0] * share_supply[1]) + (transaction[2] * prices[1])
                         ) / (share_supply[1] + transaction[2])
-                # price = oracle.get_token_price()[1]
                 share_supply[0] = price
                 share_supply[1] += transaction[2]
 
@@ -99,7 +95,6 @@ def handle_transactions():
                 price = (
                                 (basis_supply[0] * basis_supply[1]) + (transaction[2] * prices[0])
                         ) / max(0.1, (basis_supply[1] + transaction[2]))
-                # price = oracle.get_token_price()[0]
                 basis_supply[0] = price
                 basis_supply[1] += transaction[2]
         basis_demand_trajectory.append(basis_demand)
