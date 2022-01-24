@@ -1,6 +1,6 @@
 from agents.agent import Agent
 from wallet.wallet import Wallet
-from tokens.tokens import get_basis_history
+from oracles.oracle import get_basis_history, get_token_price
 import random
 
 
@@ -24,8 +24,11 @@ class Trader(Agent):
             weights *= discount_factors[day]
             overall_price /= 10 * weights
 
+        basis_price = get_token_price()[0]
+
         if overall_price > basis_price:
             random_amount_usd = random.uniform(0, self.wallet.usd // 10)
             self.buy_basis(random_amount_usd)
         else:
+            random_amount_basis = random.uniform(0, self.wallet.basis // 10)
             self.sell_basis(random_amount_basis)

@@ -1,5 +1,6 @@
 from agents.agent import Agent
 from wallet.wallet import Wallet
+import random
 
 
 class Hodler(Agent):
