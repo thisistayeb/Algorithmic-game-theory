@@ -109,7 +109,7 @@ def get_bond_price():
 
 
 def get_prior_bond_sum():
-    return main_treasury.available_bonds
+    return main_treasury.sum_issued_bonds
 
 
 def get_treasury():
