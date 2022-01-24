@@ -102,9 +102,15 @@ def get_bond_price():
     ratio = prior_bond / treasury
     expected_days_to_redeem = ((1 / (1 - ratio)) - 1) * maximum_date / 2
     alpha = get_daily_inflation_rate()
-    if alpha <0:
+    if alpha < 0:
         raise "Alpha should be a positive constant."
-    if ratio < 1:
+    if (basis_price > 0.9) and (basis_price < 1.1):
+        return 1
+
+    if expected_days_to_redeem > maximum_date:
+        return 0.1
+
+    elif ratio < 1:
         return (alpha ** expected_days_to_redeem) * basis_price
     else:
         return basis_price
