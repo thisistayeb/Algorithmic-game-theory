@@ -9,7 +9,7 @@ add Enum for handling different tokens
 """
 
 
-treasury = 10 ** 4
+treasury = 10 ** 5
 share_tokens = 10 ** 2
 bond_queue = []
 available_bonds = 0
@@ -79,8 +79,10 @@ def redeem_bonds(can_redeem):  # redeem bonds from bond_queue
 
 
 def prone_bond_queue(can_redeem):  # remove expired bonds and redeem some of them
+    global sum_issued_bonds
     today = current_date()
     while len(bond_queue) > 0 and bond_queue[0].create_date >= today + expire_days:
+        sum_issued_bonds -= bond_queue[0].amount
         bond_queue.pop(0)
 
     return redeem_bonds(can_redeem)
