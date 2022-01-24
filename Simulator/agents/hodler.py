@@ -2,7 +2,7 @@ from agents.agent import Agent
 from wallet.wallet import Wallet
 
 
-class Trader(Agent):
+class Hodler(Agent):
     def __init__(self, wallet: Wallet):
         super().__init__(wallet)
 

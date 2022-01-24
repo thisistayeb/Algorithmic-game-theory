@@ -31,3 +31,8 @@ def create_random_agent(basis=0, share=0, usd=0):
     wallet = Wallet(basis=basis, share=share, usd=usd)
     agents_database.add_wallet(wallet)
     return random_agent.RandomAgent(wallet)
+
+def create_hodler_agent(basis=0, share=0, usd=0):
+    wallet = Wallet(basis=basis, share=share, usd=usd)
+    agents_database.add_wallet(wallet)
+    return random_agent.Hodler(wallet)
