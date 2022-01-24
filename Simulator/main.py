@@ -29,10 +29,12 @@ for _round in tqdm(range(ROUNDS)):
         for agent in agents:
             agent.action()
         protocol.action()
-        update_time()
 
-    # end of the day
-    # run protocol actions here
-    protocol.main_action()
+        if hour == 23:
+            # end of the day
+            # run protocol actions here
+            protocol.main_action()
+
+        update_time()
 
 plotter.plot_basis_price()
