@@ -2,6 +2,7 @@ import protocol.treasury as main_treasury
 import math
 
 basis_price_history = [1, 1]
+bond_price_history = [1, 1]
 
 
 def get_basis_history():
@@ -22,8 +23,9 @@ def get_each_basis_reward():
 
 def get_daily_inflation_rate():
     daily = basis_price_history[-2] / basis_price_history[-1]
-    contracted = math.sqrt(daily)
-    return contracted
+    # contracted = math.sqrt(daily)
+    # return contracted
+    return daily
 
 
 def get_treasury():
