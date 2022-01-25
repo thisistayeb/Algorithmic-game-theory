@@ -32,7 +32,7 @@ def get_token_price():
     # returns a tuple which contains token prices (basis, shares, bond)
     basis_price = get_basis_price()
     share_token_price = get_share_token_price()
-    bond_price = get_bond_price(basis_price)
+    bond_price = get_bond_price()
 
     last_date = cur_date
     last_prices = [basis_price, share_token_price, bond_price]
@@ -73,7 +73,7 @@ def get_share_token_price():
     return max(price, 0.1)
 
 
-def get_bond_price(basis_price):
+def get_bond_price():
     """
     1. Basis price is an upper bound price for Bond price
     2. Expected days is an exponential function of the ratio of debt
@@ -93,7 +93,7 @@ def get_bond_price(basis_price):
      If ratio → 1 , expected days → ∞, bond price → 0
      %%% Zero division Error when ratio = 1 %%%
     """
-
+    basis_price = get_basis_price()
     prior_bond = get_prior_bond_sum()
     treasury = get_treasury()
     maximum_date = 10
