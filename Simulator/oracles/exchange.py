@@ -188,7 +188,7 @@ def handle_transactions():
 
     transaction_queue.clear()
     token_stat.basis_price_history.append(oracle.get_token_price()[0])
-    token_stat.bond_price_history.append(oracle.get_token_price()[2] * prices[0])
+    token_stat.bond_price_history.append(oracle.get_token_price()[2])
 
 
 def payback_transactions():
