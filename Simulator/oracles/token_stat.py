@@ -1,5 +1,4 @@
 import protocol.treasury as main_treasury
-import math
 
 basis_price_history = [1, 1]
 bond_price_history = [1, 1]
@@ -30,3 +29,10 @@ def get_daily_inflation_rate():
 
 def get_treasury():
     return main_treasury.treasury
+
+
+def launcher():
+    global basis_price_history, bond_price_history
+    del basis_price_history, bond_price_history
+    basis_price_history = [1, 1]
+    bond_price_history = [1, 1]

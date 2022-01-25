@@ -13,3 +13,8 @@ def current_date():
 
 def convert_time(hours=0, days=0, years=0):
     return hours + days * 24 + years * 365 * 24
+
+
+def launcher():
+    global TODAY
+    TODAY = 0

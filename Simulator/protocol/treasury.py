@@ -88,3 +88,14 @@ def prone_bond_queue(can_redeem):  # remove expired bonds and redeem some of the
         bond_queue.pop(0)
 
     return redeem_bonds(can_redeem)
+
+
+def launcher(_treasury=10**5, _shares=10**2, _bond_expire=0):
+    global treasury, share_tokens, expire_days, bond_queue, available_bonds, sum_issued_bonds
+    del treasury, share_tokens, expire_days, bond_queue, available_bonds, sum_issued_bonds
+    treasury = _treasury
+    share_tokens = _shares
+    expire_days = convert_time(days=_bond_expire)
+    bond_queue = []
+    available_bonds = 0
+    sum_issued_bonds = 0

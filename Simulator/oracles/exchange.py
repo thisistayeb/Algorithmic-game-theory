@@ -1,11 +1,8 @@
-import oracles.oracle
 from wallet.wallet import Wallet
 import oracles.oracle as oracle
 import oracles.token_stat as token_stat
 import protocol.treasury as treasury
 from protocol.treasury import issue_bond
-import numpy as np
-
 
 transaction_queue = []
 share_usd = []  # positive: share to usd, negative: usd to share, (amount, wallet)
@@ -44,8 +41,6 @@ basis -> bond
 
 
 def handle_transactions():
-    # asnp = np.asarray(transaction_queue)
-    # print(asnp[:, :3])
     """
     give order pairs from agents and pay them with a FIFO algorithm.
     """
@@ -213,9 +208,21 @@ def payback_transactions():
         if transaction[0] != 0:
             transaction[1].add_basis(transaction[0])
 
-    # if len(basis_usd) > 0:
-    #     print(np.sum(np.asarray(basis_usd)[:, 0]))
-
     share_usd.clear()
     basis_usd.clear()
     bond_basis.clear()
+
+
+def launcher():
+    global transaction_queue, share_usd, basis_usd, bond_basis, basis_supply_trajectory, basis_demand_trajectory, \
+        share_supply_trajectory, share_demand_trajectory
+    del transaction_queue, share_usd, basis_usd, bond_basis, basis_supply_trajectory, basis_demand_trajectory, \
+        share_supply_trajectory, share_demand_trajectory
+    transaction_queue = []
+    share_usd = []  # positive: share to usd, negative: usd to share, (amount, wallet)
+    basis_usd = []  # positive: basis to usd, negative: usd to basis, (amount, wallet)
+    bond_basis = []
+    basis_supply_trajectory = [[1, 1], [1, 1]]  # Save sum of basis's supply and mean price for each hour (price,size)
+    basis_demand_trajectory = [[1, 1], [1, 1]]  # Save sum of basis's demand and mean price for each hour (price,size)
+    share_supply_trajectory = [[1, 1], [1, 1]]  # Save sum of share's supply and mean price for each hour (price,size)
+    share_demand_trajectory = [[1, 1], [1, 1]]  # Save sum of share's demand and mean price for each hour (price,size)

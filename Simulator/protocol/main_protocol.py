@@ -4,7 +4,7 @@ import oracles.exchange as exchange
 import protocol.treasury as treasury
 
 
-def action():  # some simple actions are here. TODO
+def action():  # some simple actions are here.
     exchange.handle_transactions()
     exchange.payback_transactions()
 
@@ -16,6 +16,5 @@ def main_action():
         treasury.create_bond()
     elif token_price[0] < 0.9:
         treasury.create_bond()
-        # TODO
     else:  # the basis price is between 0.9$ and 1.1$
         pass

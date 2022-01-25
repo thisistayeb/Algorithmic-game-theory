@@ -1,9 +1,9 @@
-# we can create a class for oracles.
 from oracles.token_stat import *
 from utils.sys_time import current_date
 import protocol.treasury as main_treasury
 import oracles.exchange as ex
 
+maximum_date = 10
 last_date = -1
 last_prices = [1, 1]
 
@@ -93,10 +93,11 @@ def get_bond_price():
      If ratio → 1 , expected days → ∞, bond price → 0
      %%% Zero division Error when ratio = 1 %%%
     """
+    global maximum_date
+
     basis_price = get_basis_price()
     prior_bond = get_prior_bond_sum()
     treasury = get_treasury()
-    maximum_date = 10
 
     ratio = prior_bond / treasury
     expected_days_to_redeem = ((1 / (1 - ratio)) - 1) * maximum_date / 2
@@ -121,3 +122,11 @@ def get_prior_bond_sum():
 
 def get_treasury():
     return main_treasury.treasury
+
+
+def launcher(_maximum_date=10):
+    global maximum_date, last_date, last_prices
+    del last_prices
+    maximum_date = _maximum_date
+    last_date = -1
+    last_prices = [1, 1]

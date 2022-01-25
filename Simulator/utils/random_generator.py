@@ -2,7 +2,7 @@ import random
 
 
 def random_hex(length):
-    return "".join([hex(random.randint(0, 15))[-1] for i in range(length)])
+    return "".join([hex(random.randint(0, 15))[-1] for _ in range(length)])
 
 
 def generate_wallet_address():
