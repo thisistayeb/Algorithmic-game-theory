@@ -17,5 +17,5 @@ class NaiveTraderAgent(Agent):
             pass
         elif prices[0] > 1:
             self.sell_basis(self.wallet.basis)
-        elif prices[0] < 1:
+        elif (prices[0] < 1) and (prices[2] < prices[0]):
             self.buy_basis(self.wallet.usd)

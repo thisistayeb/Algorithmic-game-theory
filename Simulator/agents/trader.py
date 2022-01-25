@@ -9,7 +9,8 @@ class Trader(Agent):
         super().__init__(wallet)
 
     def action(self):
-        basis_price_history = get_basis_history()
+        basis_price_history = get_basis_history()  # (basis,share,bond)
+        prices = get_token_price()
         if len(basis_price_history) < 10:
             pass
         else:
@@ -24,9 +25,7 @@ class Trader(Agent):
                 weights *= discount_factors[day]
                 overall_price /= 10 * weights
 
-            basis_price = get_token_price()[0]
-
-            if overall_price > basis_price:
+            if (overall_price > prices[0]) and (prices[0] > prices[2]):
                 random_amount_usd = random.uniform(0, self.wallet.usd // 10)
                 self.buy_basis(random_amount_usd)
             else:

@@ -16,7 +16,8 @@ class IdealAgent(Agent):
         if prices[0] == 1:
             pass
         elif prices[0] > 1:
-            self.sell_basis(self.wallet.basis)
+            self.sell_basis(self.wallet.basis // 100)
         elif prices[0] < 1:
-            self.buy_basis(self.wallet.usd)
-            self.buy_bond(self.wallet.basis)
+            self.buy_basis(self.wallet.usd // 100)
+            if prices[0] > prices[2]:
+                self.buy_bond(self.wallet.basis // 100)

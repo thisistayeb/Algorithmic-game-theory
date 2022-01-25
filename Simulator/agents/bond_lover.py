@@ -1,6 +1,7 @@
 from agents.agent import Agent
 from wallet.wallet import Wallet
 from oracles.oracle import get_token_price
+from utils.random_generator import random_uniform
 
 
 class BondLover(Agent):
@@ -9,10 +10,11 @@ class BondLover(Agent):
 
     def action(self):
         prices = get_token_price()  # (basis, share, bond)
-        if prices[0] > 1.2:
-            self.sell_basis(self.wallet.usd // 2)
+        random_price = random_uniform(1.2, 10)
+        if prices[0] > random_price:
+            self.sell_basis(self.wallet.usd)
         else:
             if self.wallet.usd > 0:
                 self.buy_basis(self.wallet.usd)
-            if self.wallet.basis > 0:
+            if self.wallet.basis > 0 and prices[0] > prices[2]:
                 self.buy_bond(self.wallet.basis)
