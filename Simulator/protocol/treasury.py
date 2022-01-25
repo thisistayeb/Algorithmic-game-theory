@@ -14,7 +14,7 @@ share_tokens = 10 ** 2
 bond_queue = []
 available_bonds = 0
 sum_issued_bonds = 0
-expire_days = convert_time(years=5)
+expire_days = convert_time(days=10)
 
 
 def create_bond():  # calculate available bonds for sell to agents
@@ -56,6 +56,8 @@ def create_tokens():
         amount = (oracles.oracle.get_token_price()[0] - 1) * treasury
         treasury += amount
         amount = prone_bond_queue(amount)
+        if amount < 0:
+            print(amount)
         pay_share_token_holder(amount)
 
 
@@ -68,7 +70,7 @@ def redeem_certain_bond(bond, amount):  # redeem a certain bond
 
 def redeem_bonds(can_redeem):  # redeem bonds from bond_queue
     while len(bond_queue) > 0 and can_redeem > 0:
-        while len(bond_queue) > 0 and bond_queue[0].amount == 0:
+        while len(bond_queue) > 0 and bond_queue[0].amount <= 1e-8:
             bond_queue.pop(0)
         if len(bond_queue) == 0:
             break
@@ -81,7 +83,7 @@ def redeem_bonds(can_redeem):  # redeem bonds from bond_queue
 def prone_bond_queue(can_redeem):  # remove expired bonds and redeem some of them
     global sum_issued_bonds
     today = current_date()
-    while len(bond_queue) > 0 and bond_queue[0].create_date >= today + expire_days:
+    while len(bond_queue) > 0 and today >= bond_queue[0].create_date + expire_days:
         sum_issued_bonds -= bond_queue[0].amount
         bond_queue.pop(0)
 

@@ -50,7 +50,8 @@ def handle_transactions():
     give order pairs from agents and pay them with a FIFO algorithm.
     """
     prices = oracle.get_token_price()  # (basis, share, bond)
-    prices = (prices[0], prices[1], prices[2] / prices[0])  # basis -> bond
+    prices = (prices[0], prices[1], prices[2] / prices[0])
+    # 1 basis is equal to (prices[2] / prices[0]) amount of bonds
 
     """
     prices[2] = usd / bond
@@ -105,7 +106,7 @@ def handle_transactions():
         share_demand_trajectory.append(share_demand)
         share_supply_trajectory.append(share_supply)
 
-    print(f"Basis prices is {oracle.get_token_price()[0]}")
+    # print(f"Basis prices is {oracle.get_token_price()[0]}, Bond price is {oracle.get_token_price()[2] * prices[0]}")
 
     for transaction in transaction_queue:
         if transaction[0] == "share":  # share -> usd
@@ -125,9 +126,11 @@ def handle_transactions():
 
             if transaction[2] > 0:
                 share_usd.append([transaction[2], transaction[3]])
-        elif transaction[1] == "bond":  # basis -> bond # TODO
-            amount = min(treasury.available_bonds, transaction[2] / prices[2])
-            transaction[2] -= amount
+        elif transaction[1] == "bond":  # basis -> bond
+            amount = 0
+            if treasury.available_bonds > 0 and prices[0] < 1:
+                amount = min(treasury.available_bonds, transaction[2] * prices[2])  # number of bonds
+            transaction[2] -= amount / prices[2]
             issue_bond(transaction[3], amount, prices[2])  # catch error from treasury
             if transaction[2] > 0:
                 bond_basis.append([transaction[2], transaction[3]])
@@ -185,6 +188,7 @@ def handle_transactions():
 
     transaction_queue.clear()
     token_stat.basis_price_history.append(oracle.get_token_price()[0])
+    token_stat.bond_price_history.append(oracle.get_token_price()[2] * prices[0])
 
 
 def payback_transactions():
