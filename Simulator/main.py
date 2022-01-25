@@ -11,8 +11,8 @@ def start(rounds=100, update_period=24):
     # create agents from agent_handler
     agents = []
     t_basis = protocol.treasury.treasury
-    a = 5000
-    c = 10000
+    a = 1000
+    c = 2000
     d = 0
     for i in range(a):
         agents.append(
@@ -26,7 +26,7 @@ def start(rounds=100, update_period=24):
         # agents.append(agent_creator.create_hungry_trader(usd=100, basis=10000 / num2, share=100 / num2))
 
     for _round in range(rounds):
-        print(_round)
+        # print(_round)
         for hour in range(24):
             random.shuffle(agents)
             # running actions of agents here
@@ -41,4 +41,6 @@ def start(rounds=100, update_period=24):
 
             update_time()
 
-    plotter.plot_basis_price()
+    b_std, b_mean, bond_mean = plotter.analysis()
+    return b_std, b_mean, bond_mean
+    # plotter.plot_basis_price()
