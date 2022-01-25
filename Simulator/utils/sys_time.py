@@ -11,5 +11,5 @@ def current_date():
     return TODAY
 
 
-def convert_time(minutes=0, hours=0, days=0, years=0):
-    return minutes + hours * 60 + days * 24 * 60 + years * 365 * 24 * 60
+def convert_time(hours=0, days=0, years=0):
+    return hours + days * 24 + years * 365 * 24
