@@ -9,9 +9,9 @@ class RandomAgent(Agent):
         super().__init__(wallet)
 
     def action(self):
-        random_amount_basis = random.uniform(0, self.wallet.basis // 10)
-        random_amount_usd = random.uniform(0, self.wallet.usd // 10)
-        random_amount_shares = random.uniform(0, self.wallet.shares // 10)
+        random_amount_basis = random.uniform(0, self.wallet.basis / 10)
+        random_amount_usd = random.uniform(0, self.wallet.usd / 10)
+        random_amount_shares = random.uniform(0, self.wallet.shares / 10)
         choice = random.choice(
             ["buy_basis", "sell_basis", "sell_share", "buy_share", "buy_bond"]
         )
