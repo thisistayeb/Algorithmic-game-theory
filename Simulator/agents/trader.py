@@ -26,8 +26,8 @@ class Trader(Agent):
                 overall_price /= 10 * weights
 
             if (overall_price > prices[0]) and (prices[0] > prices[2]):
-                random_amount_usd = random.uniform(0, self.wallet.usd // 10)
+                random_amount_usd = random.uniform(0, self.wallet.usd / 10)
                 self.buy_basis(random_amount_usd)
             else:
-                random_amount_basis = random.uniform(0, self.wallet.basis // 10)
+                random_amount_basis = random.uniform(0, self.wallet.basis / 10)
                 self.sell_basis(random_amount_basis)
