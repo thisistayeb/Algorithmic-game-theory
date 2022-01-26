@@ -1,3 +1,5 @@
+import numpy as np
+
 from wallet.wallet import Wallet
 import oracles.oracle as oracle
 import oracles.token_stat as token_stat
@@ -101,7 +103,7 @@ def handle_transactions():
         share_demand_trajectory.append(share_demand)
         share_supply_trajectory.append(share_supply)
 
-    # print(f"Basis prices is {oracle.get_token_price()[0]}, Bond price is {oracle.get_token_price()[2] * prices[0]}")
+    # print(f"Basis prices is {oracle.get_token_price()[0]}")
 
     for transaction in transaction_queue:
         if transaction[0] == "share":  # share -> usd
@@ -182,8 +184,8 @@ def handle_transactions():
                 basis_usd.append([-transaction[2], transaction[3]])
 
     transaction_queue.clear()
-    token_stat.basis_price_history.append(oracle.get_token_price()[0])
-    token_stat.bond_price_history.append(oracle.get_token_price()[2])
+    token_stat.basis_price_history.append(prices[0])
+    token_stat.bond_price_history.append(prices[2])
 
 
 def payback_transactions():
@@ -207,6 +209,8 @@ def payback_transactions():
     for transaction in bond_basis:
         if transaction[0] != 0:
             transaction[1].add_basis(transaction[0])
+
+    # print("Result: ", np.sum(np.asarray(basis_usd)[:, 0]))
 
     share_usd.clear()
     basis_usd.clear()

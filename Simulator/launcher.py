@@ -14,13 +14,16 @@ basis_std = []
 basis_mean = []
 bond_mean = []
 
+# launch(_rounds=30)
+# exit(0)
+
 for max_date in [10, 50, 100]:
     for _period in [1, 2, 6, 12, 24]:
         print(max_date, _period)
         mean1 = 0
         mean2 = 0
         mean3 = 0
-        turns = 5
+        turns = 3
         for i in range(turns):
             basis_s, basis_m, bond_m = launch(_maximum_date=max_date, _update_period=_period, _rounds=100)
             mean1 += basis_s
