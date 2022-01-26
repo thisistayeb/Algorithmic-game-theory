@@ -1,4 +1,13 @@
-from agents import bond_lover, hungry_trader, naive_trader, random_agent, ideal_agent, hodler, trader, ideal_agent2
+from agents import (
+    bond_lover,
+    hungry_trader,
+    naive_trader,
+    random_agent,
+    ideal_agent,
+    hodler,
+    trader,
+    ideal_agent2,
+)
 import protocol.agents_database as agents_database
 from wallet.wallet import Wallet
 
@@ -49,3 +58,9 @@ def create_trader_agent(basis=0, share=0, usd=0):
     wallet = Wallet(basis=basis, share=share, usd=usd)
     agents_database.add_wallet(wallet)
     return trader.Trader(wallet)
+
+
+def create_ideal_trader3(basis=0, share=0, usd=0, radii=0):
+    wallet = Wallet(basis=basis, share=share, usd=usd)
+    agents_database.add_wallet(wallet)
+    return ideal_agent3.IdealAgent2(wallet)
