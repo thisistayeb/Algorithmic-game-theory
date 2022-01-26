@@ -95,13 +95,13 @@ def handle_transactions():
                 # price save weighted mean using 2 variables
                 price = (
                                 (basis_supply[0] * basis_supply[1]) + (transaction[2] * prices[0])
-                        ) / max(0.1, (basis_supply[1] + transaction[2]))
+                        ) / max(0.01, (basis_supply[1] + transaction[2]))
                 basis_supply[0] = price
                 basis_supply[1] += transaction[2]
-        basis_demand_trajectory.append(basis_demand)
-        basis_supply_trajectory.append(basis_supply)
-        share_demand_trajectory.append(share_demand)
-        share_supply_trajectory.append(share_supply)
+    basis_demand_trajectory.append(basis_demand)
+    basis_supply_trajectory.append(basis_supply)
+    share_demand_trajectory.append(share_demand)
+    share_supply_trajectory.append(share_supply)
 
     # print(f"Basis prices is {oracle.get_token_price()[0]}")
 
@@ -111,6 +111,8 @@ def handle_transactions():
                     (len(share_usd) != 0) and (share_usd[0][0] < 0) and (transaction[2] > 0)
             ):
                 amount = min(abs(share_usd[0][0]), transaction[2] * prices[1])  # amount in dollars
+                # if amount > 0.1:
+                #     print("A")
                 # pay usd to transaction[3]
                 transaction[2] -= amount / prices[1]
                 transaction[3].add_usd(amount)
@@ -127,6 +129,8 @@ def handle_transactions():
             amount = 0
             if treasury.available_bonds > 0 and prices[0] < 1:
                 amount = min(treasury.available_bonds, transaction[2] * prices[2])  # number of bonds
+            # if amount > 0.1:
+            #     print("B")
             transaction[2] -= amount / prices[2]
             issue_bond(transaction[3], amount, prices[2])  # catch error from treasury
             if transaction[2] > 0:
@@ -136,6 +140,8 @@ def handle_transactions():
                     (len(basis_usd) != 0) and (basis_usd[0][0] < 0) and (transaction[2] > 0)
             ):
                 amount = min(abs(basis_usd[0][0]), transaction[2] * prices[0])
+                # if amount > 0.1:
+                #     print("C", amount)
                 # pay usd to transaction[3]
                 transaction[2] -= amount / prices[0]
                 transaction[3].add_usd(amount)
@@ -153,6 +159,8 @@ def handle_transactions():
                     (len(share_usd) != 0) and (share_usd[0][0] > 0) and (transaction[2] > 0)
             ):
                 amount = min(share_usd[0][0] * prices[1], transaction[2])
+                # if amount > 0.1:
+                #     print("D", amount)
                 # pay share to transaction[3]
                 transaction[2] -= amount
                 transaction[3].add_share(amount / prices[1])
@@ -170,6 +178,8 @@ def handle_transactions():
                     (len(basis_usd) != 0) and (basis_usd[0][0] > 0) and (transaction[2] > 0)
             ):
                 amount = min(basis_usd[0][0] * prices[0], transaction[2])
+                # if amount > 0.1:
+                #     print("H")
                 # pay basis to transaction[3]
                 transaction[2] -= amount
                 transaction[3].add_basis(amount / prices[0])

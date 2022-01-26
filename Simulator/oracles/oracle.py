@@ -54,7 +54,7 @@ def get_basis_price():
 
     price = basis_demand_size / basis_supply_size
 
-    return max(price, 0.1)
+    return max(price, 0.01)
 
 
 def get_share_token_price():
@@ -70,7 +70,7 @@ def get_share_token_price():
         return 1
 
     price = share_demand_size / share_supply_size
-    return max(price, 0.1)
+    return max(price, 0.01)
 
 
 def get_bond_price():
@@ -108,7 +108,7 @@ def get_bond_price():
         return basis_price
 
     if expected_days_to_redeem > maximum_date:
-        return 0.1
+        return 0.01
 
     elif ratio < 1:
         return (alpha ** expected_days_to_redeem) * basis_price

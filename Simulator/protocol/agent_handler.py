@@ -60,7 +60,7 @@ def create_trader_agent(basis=0, share=0, usd=0):
     return trader.Trader(wallet)
 
 
-def create_ideal_trader3(basis=0, share=0, usd=0):
+def create_ideal_trader3(basis=0, share=0, usd=0, radii=0):
     wallet = Wallet(basis=basis, share=share, usd=usd)
     agents_database.add_wallet(wallet)
-    return ideal_agent3.IdealAgent3(wallet)
+    return ideal_agent3.IdealAgent3(wallet, radii)

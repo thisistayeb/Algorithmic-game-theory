@@ -21,5 +21,5 @@ class IdealAgent(Agent):
             self.sell_basis(random.uniform(0, self.wallet.basis / 10))
         else:
             self.buy_basis(random.uniform(0, self.wallet.usd / 10))
-            if prices[0] > prices[2]:
+            if prices[0] >= prices[2]:
                 self.buy_bond(random.uniform(0, self.wallet.basis / 10))
