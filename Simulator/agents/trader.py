@@ -7,6 +7,7 @@ import random
 class Trader(Agent):
     def __init__(self, wallet: Wallet):
         super().__init__(wallet)
+        self.alpha = random.random()
 
     def action(self):
         basis_price_history = get_basis_history()  # (basis,share,bond)
@@ -17,13 +18,13 @@ class Trader(Agent):
             basis_price_temp = basis_price_history[-10:]
             basis_price_temp = basis_price_temp[::-1]
 
-            alpha = random.random()
-            discount_factors = [alpha ** i for i in range(10)]
-            weights, overall_price = 1, 0
+            discount_factors = [self.alpha ** i for i in range(10)]
+            # TODO
+            weights, overall_price = 0, 0
             for day in range(10):
                 overall_price += basis_price_temp[day] * discount_factors[day]
-                weights *= discount_factors[day]
-                overall_price /= 10 * weights
+                weights += discount_factors[day]
+            overall_price /= weights
 
             if (overall_price > prices[0]) and (prices[0] > prices[2]):
                 random_amount_usd = random.uniform(0, self.wallet.usd / 10)
