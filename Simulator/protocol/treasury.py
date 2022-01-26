@@ -1,7 +1,7 @@
 import oracles
 from assets.bond import Bond
 from utils.sys_time import current_date, convert_time
-from protocol.agents_database import wallets, address_to_wallet
+import protocol.agents_database as database
 
 # TODO
 """
@@ -44,7 +44,7 @@ def issue_bond(wallet, amount, price_per_one):  # create bond and add it to wall
 
 def pay_share_token_holder(amount):  # pay extra basis token to all share holders
     each_token = amount / share_tokens
-    for wallet in wallets:
+    for wallet in database.wallets:
         wallet.add_basis(wallet.shares * each_token)
 
 
@@ -65,7 +65,7 @@ def redeem_certain_bond(bond, amount):  # redeem a certain bond
     global sum_issued_bonds
     bond.amount -= amount
     sum_issued_bonds -= amount
-    address_to_wallet[bond.owner_id].add_basis(amount)
+    database.address_to_wallet[bond.owner_id].add_basis(amount)
 
 
 def redeem_bonds(can_redeem):  # redeem bonds from bond_queue
