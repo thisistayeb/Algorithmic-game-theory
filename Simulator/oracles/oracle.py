@@ -105,7 +105,7 @@ def get_bond_price():
     if alpha < 0:
         raise "Alpha should be a positive constant."
     if (basis_price > 0.9) and (basis_price < 1.1):
-        return 1
+        return basis_price
 
     if expected_days_to_redeem > maximum_date:
         return 0.1
