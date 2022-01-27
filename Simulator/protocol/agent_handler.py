@@ -9,7 +9,7 @@ from agents import (
     ideal_agent2,
     ideal_agent3,
     ma_trader,
-    step_buyer
+    step_buyer,
 )
 import protocol.agents_database as agents_database
 from wallet.wallet import Wallet

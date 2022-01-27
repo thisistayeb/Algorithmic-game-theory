@@ -7,11 +7,11 @@ from utils.random_generator import random_uniform
 class BondLover(Agent):
     def __init__(self, wallet: Wallet):
         super().__init__(wallet)
+        self.random_price = random_uniform(1.2, 10)
 
     def action(self):
         prices = get_token_price()  # (basis, share, bond)
-        random_price = random_uniform(1.2, 10)
-        if prices[0] > random_price:
+        if prices[0] > self.random_price:
             self.sell_basis(self.wallet.basis)
         else:
             if self.wallet.usd > 0:
