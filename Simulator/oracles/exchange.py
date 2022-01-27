@@ -10,10 +10,22 @@ transaction_queue = []
 share_usd = []  # positive: share to usd, negative: usd to share, (amount, wallet)
 basis_usd = []  # positive: basis to usd, negative: usd to basis, (amount, wallet)
 bond_basis = []
-basis_supply_trajectory = [[1, 1], [1, 1]]  # Save sum of basis's supply and mean price for each hour (price,size)
-basis_demand_trajectory = [[1, 1], [1, 1]]  # Save sum of basis's demand and mean price for each hour (price,size)
-share_supply_trajectory = [[1, 1], [1, 1]]  # Save sum of share's supply and mean price for each hour (price,size)
-share_demand_trajectory = [[1, 1], [1, 1]]  # Save sum of share's demand and mean price for each hour (price,size)
+basis_supply_trajectory = [
+    [1, 1],
+    [1, 1],
+]  # Save sum of basis's supply and mean price for each hour (price,size)
+basis_demand_trajectory = [
+    [1, 1],
+    [1, 1],
+]  # Save sum of basis's demand and mean price for each hour (price,size)
+share_supply_trajectory = [
+    [1, 1],
+    [1, 1],
+]  # Save sum of share's supply and mean price for each hour (price,size)
+share_demand_trajectory = [
+    [1, 1],
+    [1, 1],
+]  # Save sum of share's demand and mean price for each hour (price,size)
 
 
 # convert amount of first token to second token from wallet
@@ -65,15 +77,15 @@ def handle_transactions():
             if transaction[1] == "basis":  # USD -> basis
                 # price save weighted mean using 2 variables
                 price = (
-                                (basis_demand[0] * basis_demand[1]) + (transaction[2] * prices[0])
-                        ) / (basis_demand[1] + transaction[2])
+                    (basis_demand[0] * basis_demand[1]) + (transaction[2] * prices[0])
+                ) / (basis_demand[1] + transaction[2])
                 basis_demand[0] = price
                 basis_demand[1] += transaction[2]
             elif transaction[1] == "share":  # USD -> share
                 # price save weighted mean using 2 variables
                 price = (
-                                (share_demand[0] * share_demand[1]) + (transaction[2] * prices[1])
-                        ) / (share_demand[1] + transaction[2])
+                    (share_demand[0] * share_demand[1]) + (transaction[2] * prices[1])
+                ) / (share_demand[1] + transaction[2])
                 share_demand[0] = price
                 share_demand[1] += transaction[2]
 
@@ -83,8 +95,8 @@ def handle_transactions():
             if transaction[1] == "usd":  # share -> USD
                 # price save weighted mean using 2 variables
                 price = (
-                                (share_supply[0] * share_supply[1]) + (transaction[2] * prices[1])
-                        ) / (share_supply[1] + transaction[2])
+                    (share_supply[0] * share_supply[1]) + (transaction[2] * prices[1])
+                ) / (share_supply[1] + transaction[2])
                 share_supply[0] = price
                 share_supply[1] += transaction[2]
 
@@ -94,8 +106,8 @@ def handle_transactions():
             if transaction[1] == "usd":  # basis -> USD
                 # price save weighted mean using 2 variables
                 price = (
-                                (basis_supply[0] * basis_supply[1]) + (transaction[2] * prices[0])
-                        ) / max(0.01, (basis_supply[1] + transaction[2]))
+                    (basis_supply[0] * basis_supply[1]) + (transaction[2] * prices[0])
+                ) / max(0.01, (basis_supply[1] + transaction[2]))
                 basis_supply[0] = price
                 basis_supply[1] += transaction[2]
     basis_demand_trajectory.append(basis_demand)
@@ -108,9 +120,11 @@ def handle_transactions():
     for transaction in transaction_queue:
         if transaction[0] == "share":  # share -> usd
             while (
-                    (len(share_usd) != 0) and (share_usd[0][0] < 0) and (transaction[2] > 0)
+                (len(share_usd) != 0) and (share_usd[0][0] < 0) and (transaction[2] > 0)
             ):
-                amount = min(abs(share_usd[0][0]), transaction[2] * prices[1])  # amount in dollars
+                amount = min(
+                    abs(share_usd[0][0]), transaction[2] * prices[1]
+                )  # amount in dollars
                 # if amount > 0.1:
                 #     print("A")
                 # pay usd to transaction[3]
@@ -128,7 +142,9 @@ def handle_transactions():
         elif transaction[1] == "bond":  # basis -> bond
             amount = 0
             if treasury.available_bonds > 0 and prices[0] < 1:
-                amount = min(treasury.available_bonds, transaction[2] * prices[2])  # number of bonds
+                amount = min(
+                    treasury.available_bonds, transaction[2] * prices[2]
+                )  # number of bonds
             # if amount > 0.1:
             #     print("B")
             transaction[2] -= amount / prices[2]
@@ -137,7 +153,7 @@ def handle_transactions():
                 bond_basis.append([transaction[2], transaction[3]])
         elif transaction[0] == "basis":  # basis -> usd
             while (
-                    (len(basis_usd) != 0) and (basis_usd[0][0] < 0) and (transaction[2] > 0)
+                (len(basis_usd) != 0) and (basis_usd[0][0] < 0) and (transaction[2] > 0)
             ):
                 amount = min(abs(basis_usd[0][0]), transaction[2] * prices[0])
                 # if amount > 0.1:
@@ -156,7 +172,7 @@ def handle_transactions():
                 basis_usd.append([transaction[2], transaction[3]])
         elif transaction[1] == "share":  # usd -> share
             while (
-                    (len(share_usd) != 0) and (share_usd[0][0] > 0) and (transaction[2] > 0)
+                (len(share_usd) != 0) and (share_usd[0][0] > 0) and (transaction[2] > 0)
             ):
                 amount = min(share_usd[0][0] * prices[1], transaction[2])
                 # if amount > 0.1:
@@ -175,7 +191,7 @@ def handle_transactions():
                 share_usd.append([-transaction[2], transaction[3]])
         elif transaction[1] == "basis":  # usd -> basis
             while (
-                    (len(basis_usd) != 0) and (basis_usd[0][0] > 0) and (transaction[2] > 0)
+                (len(basis_usd) != 0) and (basis_usd[0][0] > 0) and (transaction[2] > 0)
             ):
                 amount = min(basis_usd[0][0] * prices[0], transaction[2])
                 # if amount > 0.1:
@@ -228,15 +244,34 @@ def payback_transactions():
 
 
 def launcher():
-    global transaction_queue, share_usd, basis_usd, bond_basis, basis_supply_trajectory, basis_demand_trajectory, \
-        share_supply_trajectory, share_demand_trajectory
-    del transaction_queue, share_usd, basis_usd, bond_basis, basis_supply_trajectory, basis_demand_trajectory, \
-        share_supply_trajectory, share_demand_trajectory
+    global transaction_queue, share_usd, basis_usd, bond_basis, basis_supply_trajectory, basis_demand_trajectory, share_supply_trajectory, share_demand_trajectory
+    del (
+        transaction_queue,
+        share_usd,
+        basis_usd,
+        bond_basis,
+        basis_supply_trajectory,
+        basis_demand_trajectory,
+        share_supply_trajectory,
+        share_demand_trajectory,
+    )
     transaction_queue = []
     share_usd = []  # positive: share to usd, negative: usd to share, (amount, wallet)
     basis_usd = []  # positive: basis to usd, negative: usd to basis, (amount, wallet)
     bond_basis = []
-    basis_supply_trajectory = [[1, 1], [1, 1]]  # Save sum of basis's supply and mean price for each hour (price,size)
-    basis_demand_trajectory = [[1, 1], [1, 1]]  # Save sum of basis's demand and mean price for each hour (price,size)
-    share_supply_trajectory = [[1, 1], [1, 1]]  # Save sum of share's supply and mean price for each hour (price,size)
-    share_demand_trajectory = [[1, 1], [1, 1]]  # Save sum of share's demand and mean price for each hour (price,size)
+    basis_supply_trajectory = [
+        [1, 1],
+        [1, 1],
+    ]  # Save sum of basis's supply and mean price for each hour (price,size)
+    basis_demand_trajectory = [
+        [1, 1],
+        [1, 1],
+    ]  # Save sum of basis's demand and mean price for each hour (price,size)
+    share_supply_trajectory = [
+        [1, 1],
+        [1, 1],
+    ]  # Save sum of share's supply and mean price for each hour (price,size)
+    share_demand_trajectory = [
+        [1, 1],
+        [1, 1],
+    ]  # Save sum of share's demand and mean price for each hour (price,size)

@@ -12,7 +12,8 @@ from agents import (
     ideal_agent,
     hodler,
     trader,
-    ideal_agent2, ideal_agent3,
+    ideal_agent2,
+    ideal_agent3,
 )
 import plotter
 
@@ -38,19 +39,37 @@ def start(rounds=100, update_period=24, plot=False):
     #         agent_creator.create_trader_agent(usd=w1 * t_basis / a, basis=w1 * t_basis / a, share=w1 * 100 / a))
     for i in range(a):
         agents.append(
-            agent_creator.create_ideal_trader(usd=w1 * t_basis / a, basis=w1 * t_basis / a, share=w1 * 100 / a,
-                                              radii=random.choice([0, 0.1, 0.2, 0.3, 0.4, 0.5, 1, 2])))
+            agent_creator.create_ideal_trader(
+                usd=w1 * t_basis / a,
+                basis=w1 * t_basis / a,
+                share=w1 * 100 / a,
+                radii=random.choice([0, 0.1, 0.2, 0.3, 0.4, 0.5, 1, 2]),
+            )
+        )
     for i in range(b):
         agents.append(
-            agent_creator.create_ideal_trader2(usd=w2 * t_basis / b, basis=w2 * t_basis / b, share=w2 * 100 / b,
-                                               radii=random.choice([0, 0.2, 0.5, 0.7, 5, 10, 100, 500])))
+            agent_creator.create_ideal_trader2(
+                usd=w2 * t_basis / b,
+                basis=w2 * t_basis / b,
+                share=w2 * 100 / b,
+                radii=random.choice([0, 0.2, 0.5, 0.7, 5, 10, 100, 500]),
+            )
+        )
     for i in range(c):
         agents.append(
-            agent_creator.create_ideal_trader3(usd=w3 * t_basis / c, basis=w3 * t_basis / c, share=w3 * 100 / c,
-                                               radii=random.choice([0.8, 0.6, 0.4, 0.2, 0.1])))
+            agent_creator.create_ideal_trader3(
+                usd=w3 * t_basis / c,
+                basis=w3 * t_basis / c,
+                share=w3 * 100 / c,
+                radii=random.choice([0.8, 0.6, 0.4, 0.2, 0.1]),
+            )
+        )
     for i in range(d):
         agents.append(
-            agent_creator.create_random_agent(usd=w4 * t_basis / d, basis=w4 * t_basis / d, share=w4 * 100 / d))
+            agent_creator.create_random_agent(
+                usd=w4 * t_basis / d, basis=w4 * t_basis / d, share=w4 * 100 / d
+            )
+        )
 
     for _round in range(rounds):
         # print(protocol.treasury.treasury)
@@ -73,11 +92,11 @@ def start(rounds=100, update_period=24, plot=False):
         for hour in range(24):
             random.shuffle(agents)
             # if _round > 1:
-                # demand = oracles.exchange.basis_demand_trajectory[-1]
-                # demand2 = oracles.exchange.basis_demand_trajectory[-30]
-                # print(oracles.oracle.get_token_price()[0], demand, demand2)
-                # print(oracles.exchange.basis_demand_trajectory)
-                # exit(0)
+            # demand = oracles.exchange.basis_demand_trajectory[-1]
+            # demand2 = oracles.exchange.basis_demand_trajectory[-30]
+            # print(oracles.oracle.get_token_price()[0], demand, demand2)
+            # print(oracles.exchange.basis_demand_trajectory)
+            # exit(0)
             # running actions of agents here
             for agent in agents:
                 # r = random.choice([False, True, False, False, False, False, False])

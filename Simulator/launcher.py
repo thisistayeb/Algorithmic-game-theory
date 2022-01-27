@@ -5,7 +5,14 @@ import main
 import plotter
 
 
-def launch(_maximum_date=10, p_treasury=10 ** 5, p_shares=100, _rounds=20, _update_period=24, _plot=False):
+def launch(
+    _maximum_date=10,
+    p_treasury=10 ** 5,
+    p_shares=100,
+    _rounds=20,
+    _update_period=24,
+    _plot=False,
+):
     history_eraser.clean(_maximum_date, p_treasury, p_shares)
     return main.start(rounds=_rounds, update_period=_update_period, plot=_plot)
 
@@ -28,7 +35,9 @@ for max_date in dates:
         mean3 = 0
         turns = 2
         for i in range(turns):
-            basis_s, basis_m, bond_m = launch(_maximum_date=max_date, _update_period=_period, _rounds=50)
+            basis_s, basis_m, bond_m = launch(
+                _maximum_date=max_date, _update_period=_period, _rounds=50
+            )
             mean1 += basis_s
             mean2 += basis_m
             mean3 += bond_m
@@ -40,12 +49,24 @@ print(basis_std)
 print(basis_mean)
 print(bond_mean)
 
-plotter.plot_heatmap(np.asarray(basis_std).reshape(len(periods), len(dates)),
-                     periods,
-                     dates, "res1.png", "std of basis price")
-plotter.plot_heatmap(np.asarray(basis_mean).reshape(len(periods), len(dates)),
-                     periods,
-                     dates, "res2.png", "mean of basis price")
-plotter.plot_heatmap(np.asarray(bond_mean).reshape(len(periods), len(dates)),
-                     periods,
-                     dates, "res3.png", "mean of bond price")
+plotter.plot_heatmap(
+    np.asarray(basis_std).reshape(len(periods), len(dates)),
+    periods,
+    dates,
+    "res1.png",
+    "std of basis price",
+)
+plotter.plot_heatmap(
+    np.asarray(basis_mean).reshape(len(periods), len(dates)),
+    periods,
+    dates,
+    "res2.png",
+    "mean of basis price",
+)
+plotter.plot_heatmap(
+    np.asarray(bond_mean).reshape(len(periods), len(dates)),
+    periods,
+    dates,
+    "res3.png",
+    "mean of bond price",
+)
