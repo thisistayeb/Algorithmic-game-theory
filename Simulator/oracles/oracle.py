@@ -59,12 +59,12 @@ def get_share_token_price():
     share_supply_tr = share_supply_trajectory()
     share_demand_tr = share_demand_trajectory()
 
-    share_demand_price = share_demand_tr[-1][0]
+    share_price = share_demand_tr[-1][0]
     share_demand_size = share_demand_tr[-1][1]
     share_supply_size = share_supply_tr[-1][1]
 
     if share_demand_size < 1 or share_supply_size < 1:
-        return share_demand_price
+        return share_price
 
     price = share_demand_size / share_supply_size
     return max(price, 0.01)
