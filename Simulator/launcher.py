@@ -14,8 +14,8 @@ basis_std = []
 basis_mean = []
 bond_mean = []
 
-# launch(_rounds=20, _update_period=6, _plot=True, _maximum_date=100)
-# exit(0)
+launch(_rounds=100, _update_period=24, _plot=True, _maximum_date=100)
+exit(0)
 
 dates = [10, 25, 50, 100]
 periods = [1, 2, 6, 12, 24]

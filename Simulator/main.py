@@ -26,18 +26,18 @@ def start(rounds=100, update_period=24, plot=False):
     # create agents from agent_handler
     agents = []
     t_basis = protocol.treasury.treasury
-    a = 1000
+    a = 500
     b = 1000
-    c = 1000
-    d = 1000
+    c = 500
+    d = 500
     e = 0
     f = 0
-    w1 = 0.4
+    w1 = 0.1
     w2 = 0.4
-    w3 = 0
-    w4 = 0.2
-    w5 = 0.2
-    w6 = 0.05
+    w3 = 0.1
+    w4 = 0.4
+    w5 = 0
+    w6 = 0
     # a = 500
     # b = 500
     # c = 500
