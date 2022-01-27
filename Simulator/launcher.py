@@ -14,8 +14,8 @@ basis_std = []
 basis_mean = []
 bond_mean = []
 
-launch(_rounds=50, _update_period=24, _plot=True, _maximum_date=100)
-exit(0)
+# launch(_rounds=100, _update_period=12, _plot=True, _maximum_date=10)
+# exit(0)
 
 dates = [10, 25, 50, 100]
 periods = [1, 2, 6, 12, 24]
@@ -34,6 +34,7 @@ for max_date in dates:
             mean1 += basis_s
             mean2 += basis_m
             mean3 += bond_m
+        print(mean1, mean2, mean3)
         basis_std.append(mean1 / turns)
         basis_mean.append(mean2 / turns)
         bond_mean.append(mean3 / turns)

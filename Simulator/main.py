@@ -31,11 +31,11 @@ def start(rounds=100, update_period=24, plot=False):
     c = 500
     d = 500
     e = 500
-    f = 0
+    f = 500
     w1 = 0.1  # ideal
     w2 = 0.45  # ideal 2
     w3 = 0.25  # ideal 3
-    w4 = 0.1  # random
+    w4 = 0.05  # random
     w5 = 0.1  # bond lover
     w6 = 0.05  # ma trader
     # for i in range(a):
@@ -79,22 +79,6 @@ def start(rounds=100, update_period=24, plot=False):
     for _round in range(rounds):
         # print(protocol.treasury.treasury)
         # print(_round)
-        # sum_ide1 = 0
-        # sum_ide2 = 0
-        # sum_ide3 = 0
-        # sum_rand = 0
-        #
-        # for agent in agents:
-        #     if isinstance(agent, ideal_agent.IdealAgent):
-        #         sum_ide1 += agent.wallet.basis
-        #     if isinstance(agent, ideal_agent2.IdealAgent2):
-        #         sum_ide2 += agent.wallet.basis
-        #     if isinstance(agent, ideal_agent3.IdealAgent3):
-        #         sum_ide3 += agent.wallet.basis
-        #     if isinstance(agent, random_agent.RandomAgent):
-        # sum_rand += agent.wallet.basis
-        # print(sum_ide1, sum_ide2, sum_ide3, sum_rand)
-        # print(sum_rand)
         for hour in range(24):
             # print(oracles.exchange.basis_demand_trajectory[-1], oracles.exchange.basis_supply_trajectory[-1])
             random.shuffle(agents)
@@ -113,6 +97,7 @@ def start(rounds=100, update_period=24, plot=False):
             update_time()
 
     b_std, b_mean, bond_mean = plotter.analysis()
+    # print(b_std, b_mean, bond_mean)
     if plot:
         plotter.plot_basis_price()
     return b_std, b_mean, bond_mean

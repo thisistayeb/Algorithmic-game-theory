@@ -20,7 +20,7 @@ def analysis():
 
 
 def plot_basis_price():
-    period = 1
+    period = 24
     basis_history = np.asarray(token_stat.basis_price_history)
     bond_history = np.asarray(token_stat.bond_price_history)
     basis_history = basis_history[2:].reshape(
