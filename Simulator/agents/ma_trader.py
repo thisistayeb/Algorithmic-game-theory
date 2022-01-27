@@ -13,7 +13,7 @@ import random
 class MATrader(Agent):
     def __init__(self, wallet: Wallet):
         super().__init__(wallet)
-        self.N = random.uniform(10, 40)
+        self.N = random.randint(10, 40)
 
     def action(self):
         basis_price_history = get_basis_history()  # (basis,share,bond)
@@ -21,7 +21,7 @@ class MATrader(Agent):
         if len(basis_price_history) < self.N:
             pass
         else:
-            moving_average = sum(basis_price_history[-self.N :]) / self.N
+            moving_average = sum(basis_price_history[-self.N:]) / self.N
 
             if moving_average >= prices[0]:
                 random_amount_usd = random.uniform(0, self.wallet.usd / 10)

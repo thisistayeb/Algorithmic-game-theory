@@ -28,39 +28,66 @@ def start(rounds=100, update_period=24, plot=False):
     t_basis = protocol.treasury.treasury
     a = 1000
     b = 1000
-    c = 0 // 2
+    c = 1000
     d = 1000
+    e = 0
+    f = 0
     w1 = 0.4
     w2 = 0.4
-    w3 = 0.5
+    w3 = 0
     w4 = 0.2
+    w5 = 0.2
+    w6 = 0.05
+    # a = 500
+    # b = 500
+    # c = 500
+    # d = 500
+    # e = 500
+    # f = 500
+    # w1 = 0
+    # w2 = 0.55
+    # w3 = 0
+    # w4 = 0.2
+    # w5 = 0.2
+    # w6 = 0.05
     # for i in range(a):
     #     agents.append(
     #         agent_creator.create_trader_agent(usd=w1 * t_basis / a, basis=w1 * t_basis / a, share=w1 * 100 / a))
     for i in range(a):
         agents.append(agent_creator.create_ideal_trader(
-                usd=w1 * t_basis / a,
-                basis=w1 * t_basis / a,
-                share=w1 * 100 / a,
-                radii=random.uniform(0, 2)))
+            usd=w1 * t_basis / a,
+            basis=w1 * t_basis / a,
+            share=w1 * 100 / a,
+            radii=random.uniform(0, 2)))
     for i in range(b):
         agents.append(agent_creator.create_ideal_trader2(
-                usd=w2 * t_basis / b,
-                basis=w2 * t_basis / b,
-                share=w2 * 100 / b,
-                radii=random.uniform(0, 5)))
+            usd=w2 * t_basis / b,
+            basis=w2 * t_basis / b,
+            share=w2 * 100 / b,
+            radii=random.uniform(0, 5)))
+    # for i in range(c):
+    #     agents.append(agent_creator.create_rational_trader_agent(
+    #         usd=w3 * t_basis / c,
+    #         basis=w3 * t_basis / c,
+    #         share=w3 * 100 / c))
     for i in range(c):
         agents.append(agent_creator.create_ideal_trader3(
-                usd=w3 * t_basis / c,
-                basis=w3 * t_basis / c,
-                share=w3 * 100 / c,
-                radii=random.uniform(0.1, 1)))
-                # radii=random.choice([0.6, 0.4, 0.2, 0.1])))
+            usd=w3 * t_basis / c,
+            basis=w3 * t_basis / c,
+            share=w3 * 100 / c,
+            radii=random.uniform(0.1, 1)))
     for i in range(d):
         agents.append(agent_creator.create_random_agent(usd=w4 * t_basis / d,
                                                         basis=w4 * t_basis / d,
                                                         share=w4 * 100 / d))
-
+    for i in range(e):
+        agents.append(agent_creator.create_bond_lover(usd=w5 * t_basis / e,
+                                                      basis=w5 * t_basis / e,
+                                                      share=w5 * 100 / e))
+    for i in range(f):
+        agents.append(agent_creator.create_ma_trader(usd=w6 * t_basis / f,
+                                                     basis=w6 * t_basis / f,
+                                                     share=w6 * 100 / f))
     for _round in range(rounds):
         # print(protocol.treasury.treasury)
         # print(_round)
@@ -77,7 +104,7 @@ def start(rounds=100, update_period=24, plot=False):
         #     if isinstance(agent, ideal_agent3.IdealAgent3):
         #         sum_ide3 += agent.wallet.basis
         #     if isinstance(agent, random_agent.RandomAgent):
-                # sum_rand += agent.wallet.basis
+        # sum_rand += agent.wallet.basis
         # print(sum_ide1, sum_ide2, sum_ide3, sum_rand)
         # print(sum_rand)
         for hour in range(24):

@@ -20,10 +20,10 @@ class IdealAgent3(Agent):
         if prices[0] > 1 + self.radii:
             self.sell_basis(random.uniform(0, self.wallet.basis / 10))
         elif prices[0] < 1 - self.radii:
-            if demand < 300000:  # TODO
+            if demand < 300:  # TODO
                 return
             # self.wallet.basis += demand / 200
-            self.sell_basis(min(self.wallet.basis, demand / 2000))
+            self.sell_basis(min(self.wallet.basis, demand / 1000))
         else:
             self.buy_basis(random.uniform(0, self.wallet.usd / 10))
             if prices[2] <= prices[0] <= 1:

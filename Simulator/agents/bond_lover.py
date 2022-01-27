@@ -12,9 +12,9 @@ class BondLover(Agent):
     def action(self):
         prices = get_token_price()  # (basis, share, bond)
         if prices[0] > self.random_price:
-            self.sell_basis(self.wallet.basis)
+            self.sell_basis(random.uniform(0, self.wallet.basis / 5))
         else:
             if self.wallet.usd > 0:
-                self.buy_basis(self.wallet.usd)
-            if self.wallet.basis > 0 and prices[0] >= prices[2]:
-                self.buy_bond(self.wallet.basis)
+                self.buy_basis(random.uniform(0, self.wallet.usd / 5))
+            if self.wallet.basis > 0 and 1 >= prices[0] >= prices[2]:
+                self.buy_bond(random.uniform(0, self.wallet.basis / 5))
