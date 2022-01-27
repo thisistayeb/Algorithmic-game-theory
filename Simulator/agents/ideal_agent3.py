@@ -17,14 +17,14 @@ class IdealAgent3(Agent):
         """
         prices = get_token_price()  # (basis, share, bond)
         demand = oracles.exchange.basis_demand_trajectory[-2][1]
-        if prices[0] > 1:
+        if prices[0] > 1 + self.radii:
             self.sell_basis(random.uniform(0, self.wallet.basis / 10))
         elif prices[0] < 1 - self.radii:
-            if demand < 100000:  # TODO
+            if demand < 300000:  # TODO
                 return
-            self.wallet.basis += demand / 200
-            self.sell_basis(min(self.wallet.basis, demand / 200))
+            # self.wallet.basis += demand / 200
+            self.sell_basis(min(self.wallet.basis, demand / 2000))
         else:
             self.buy_basis(random.uniform(0, self.wallet.usd / 10))
-            if prices[0] >= prices[2]:
+            if prices[2] <= prices[0] <= 1:
                 self.buy_bond(random.uniform(0, self.wallet.basis / 10))

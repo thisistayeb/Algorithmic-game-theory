@@ -3,6 +3,7 @@ from utils.sys_time import update_time
 import protocol.main_protocol as protocol
 import protocol.agent_handler as agent_creator
 import random
+import time
 from agents import (
     bond_lover,
     hungry_trader,
@@ -25,44 +26,36 @@ def start(rounds=100, update_period=24, plot=False):
     # create agents from agent_handler
     agents = []
     t_basis = protocol.treasury.treasury
-    a = 0
-    b = 0
-    c = 0
-    d = 10000
+    a = 1000
+    b = 1000
+    c = 0 // 2
+    d = 1000
     w1 = 0.4
-    w2 = 0.2
-    w3 = 0.65
-    w4 = 1
+    w2 = 0.4
+    w3 = 0.5
+    w4 = 0.2
     # for i in range(a):
     #     agents.append(
     #         agent_creator.create_trader_agent(usd=w1 * t_basis / a, basis=w1 * t_basis / a, share=w1 * 100 / a))
     for i in range(a):
-        agents.append(
-            agent_creator.create_ideal_trader(
+        agents.append(agent_creator.create_ideal_trader(
                 usd=w1 * t_basis / a,
                 basis=w1 * t_basis / a,
                 share=w1 * 100 / a,
-                radii=random.choice([0, 0.1, 0.2, 0.3, 0.4, 0.5, 1, 2]),
-            )
-        )
+                radii=random.uniform(0, 2)))
     for i in range(b):
-        agents.append(
-            agent_creator.create_ideal_trader2(
+        agents.append(agent_creator.create_ideal_trader2(
                 usd=w2 * t_basis / b,
                 basis=w2 * t_basis / b,
                 share=w2 * 100 / b,
-                radii=random.choice([0, 0.2, 0.5, 0.7, 5, 10, 100, 500]),
-            )
-        )
+                radii=random.uniform(0, 5)))
     for i in range(c):
-        agents.append(
-            agent_creator.create_ideal_trader3(
+        agents.append(agent_creator.create_ideal_trader3(
                 usd=w3 * t_basis / c,
                 basis=w3 * t_basis / c,
                 share=w3 * 100 / c,
-                radii=random.choice([0.8, 0.6, 0.4, 0.2, 0.1]),
-            )
-        )
+                radii=random.uniform(0.1, 1)))
+                # radii=random.choice([0.6, 0.4, 0.2, 0.1])))
     for i in range(d):
         agents.append(agent_creator.create_random_agent(usd=w4 * t_basis / d,
                                                         basis=w4 * t_basis / d,
@@ -93,6 +86,8 @@ def start(rounds=100, update_period=24, plot=False):
             # running actions of agents here
             for agent in agents:
                 agent.action()
+            # print(time.time() - start)
+            # start = time.time()
             protocol.action()
 
             if (hour + 1) % update_period == 0:

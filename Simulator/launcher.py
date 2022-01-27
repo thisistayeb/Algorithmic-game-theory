@@ -14,7 +14,7 @@ basis_std = []
 basis_mean = []
 bond_mean = []
 
-# launch(_rounds=100, _update_period=24, _plot=True, _maximum_date=100)
+# launch(_rounds=20, _update_period=1, _plot=True, _maximum_date=100)
 # exit(0)
 
 dates = [10, 25, 50, 100]
@@ -26,7 +26,7 @@ for max_date in dates:
         mean1 = 0
         mean2 = 0
         mean3 = 0
-        turns = 3
+        turns = 1
         for i in range(turns):
             basis_s, basis_m, bond_m = launch(
                 _maximum_date=max_date, _update_period=_period, _rounds=100
