@@ -44,9 +44,7 @@ def get_basis_price():
     basis_supply_tr = basis_supply_trajectory()
     basis_demand_tr = basis_demand_trajectory()
 
-    basis_demand_price = basis_demand_tr[-1][0]
     basis_demand_size = basis_demand_tr[-1][1]
-    basis_supply_price = basis_supply_tr[-1][0]
     basis_supply_size = basis_supply_tr[-1][1]
 
     if basis_demand_size <= 1 or basis_supply_size <= 1:
@@ -63,7 +61,6 @@ def get_share_token_price():
 
     share_demand_price = share_demand_tr[-1][0]
     share_demand_size = share_demand_tr[-1][1]
-    share_supply_price = share_supply_tr[-1][0]
     share_supply_size = share_supply_tr[-1][1]
 
     if share_demand_size < 1 or share_supply_size < 1:
