@@ -2,7 +2,6 @@ from agents.agent import Agent
 from wallet.wallet import Wallet
 from oracles.oracle import get_token_price
 import random
-import numpy as np
 
 
 class RandomAgent(Agent):

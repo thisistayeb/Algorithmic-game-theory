@@ -1,13 +1,13 @@
 from agents.agent import Agent
 from wallet.wallet import Wallet
 from oracles.oracle import get_token_price
-from utils.random_generator import random_uniform
+import random
 
 
 class BondLover(Agent):
     def __init__(self, wallet: Wallet):
         super().__init__(wallet)
-        self.random_price = random_uniform(1.2, 10)
+        self.random_price = random.uniform(1.2, 10)
 
     def action(self):
         prices = get_token_price()  # (basis, share, bond)

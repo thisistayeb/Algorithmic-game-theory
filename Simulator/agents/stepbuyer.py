@@ -1,13 +1,12 @@
 from agents.agent import Agent
 from wallet.wallet import Wallet
-from utils.random_generator import random_uniform
 import random
 
 
 class StepBuyer(Agent):
     def __init__(self, wallet: Wallet):
         super().__init__(wallet)
-        self.N = random_uniform(5, 20)
+        self.N = random.uniform(5, 20)
 
     def action(self):
         usd_portion = self.wallet.usd / self.N

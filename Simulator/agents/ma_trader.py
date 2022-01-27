@@ -7,14 +7,13 @@ from agents.agent import Agent
 from wallet.wallet import Wallet
 from oracles.oracle import get_token_price
 from oracles.token_stat import get_basis_history
-from utils.random_generator import random_uniform
 import random
 
 
 class MATrader(Agent):
     def __init__(self, wallet: Wallet):
         super().__init__(wallet)
-        self.N = random_uniform(10, 40)
+        self.N = random.uniform(10, 40)
 
     def action(self):
         basis_price_history = get_basis_history()  # (basis,share,bond)

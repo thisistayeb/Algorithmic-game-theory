@@ -2,6 +2,7 @@ import oracles
 from assets.bond import Bond
 from utils.sys_time import current_date, convert_time
 import protocol.agents_database as database
+from collections import deque
 
 # TODO
 """
@@ -11,7 +12,7 @@ add Enum for handling different tokens
 
 treasury = 10 ** 5
 share_tokens = 10 ** 2
-bond_queue = []
+bond_queue = deque()
 available_bonds = 0
 sum_issued_bonds = 0
 expire_days = convert_time(days=10)
@@ -71,7 +72,7 @@ def redeem_certain_bond(bond, amount):  # redeem a certain bond
 def redeem_bonds(can_redeem):  # redeem bonds from bond_queue
     while len(bond_queue) > 0 and can_redeem > 0:
         while len(bond_queue) > 0 and bond_queue[0].amount <= 1e-8:
-            bond_queue.pop(0)
+            bond_queue.popleft()
         if len(bond_queue) == 0:
             break
         amount = min(bond_queue[0].amount, can_redeem)
@@ -85,7 +86,7 @@ def prone_bond_queue(can_redeem):  # remove expired bonds and redeem some of the
     today = current_date()
     while len(bond_queue) > 0 and today >= bond_queue[0].create_date + expire_days:
         sum_issued_bonds -= bond_queue[0].amount
-        bond_queue.pop(0)
+        bond_queue.popleft()
 
     return redeem_bonds(can_redeem)
 
@@ -103,6 +104,6 @@ def launcher(_treasury=10 ** 5, _shares=10 ** 2, _bond_expire=0):
     treasury = _treasury
     share_tokens = _shares
     expire_days = convert_time(days=_bond_expire)
-    bond_queue = []
+    bond_queue = deque()
     available_bonds = 0
     sum_issued_bonds = 0

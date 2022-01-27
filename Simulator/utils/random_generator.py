@@ -6,16 +6,12 @@ def random_hex(length):
 
 
 def generate_wallet_address():
-    return random_hex(64)
+    return random_hex(12)
 
 
 def generate_bond_address():
-    return random_hex(64)
+    return random_hex(12)
 
 
 def random_gauss(mean, std):
     return random.gauss(mean, std)
-
-
-def random_uniform(begin, end):
-    return random.uniform(begin, end)

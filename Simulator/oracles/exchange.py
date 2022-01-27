@@ -1,15 +1,13 @@
-import numpy as np
-
+from collections import deque
 from wallet.wallet import Wallet
 import oracles.oracle as oracle
 import oracles.token_stat as token_stat
 import protocol.treasury as treasury
 from protocol.treasury import issue_bond
 
-transaction_queue = []
-share_usd = []  # positive: share to usd, negative: usd to share, (amount, wallet)
-basis_usd = []  # positive: basis to usd, negative: usd to basis, (amount, wallet)
-bond_basis = []
+transaction_queue = deque()
+share_usd = deque()  # positive: share to usd, negative: usd to share, (amount, wallet)
+basis_usd = deque()  # positive: basis to usd, negative: usd to basis, (amount, wallet)
 basis_supply_trajectory = [
     [1, 1],
     [1, 1],
@@ -30,7 +28,7 @@ share_demand_trajectory = [
 
 # convert amount of first token to second token from wallet
 def add_transaction(first, second, amount, wallet: Wallet):
-    if amount < 1e-8:
+    if amount < 1e-6:
         return False
     if first == "usd":
         if wallet.usd < amount:
@@ -77,17 +75,14 @@ def handle_transactions():
     for transaction in transaction_queue:
         if transaction[0] == "share":  # share -> usd
             # price save weighted mean using 2 variables
-            price = (
+            share_supply[0] = (
                             (share_supply[0] * share_supply[1]) + (transaction[2] * prices[1])
                     ) / (share_supply[1] + transaction[2])
-            share_supply[0] = price
             share_supply[1] += transaction[2]
             while (
                 (len(share_usd) != 0) and (share_usd[0][0] < 0) and (transaction[2] > 0)
             ):
-                amount = min(
-                    abs(share_usd[0][0]), transaction[2] * prices[1]
-                )  # amount in dollars
+                amount = min(-share_usd[0][0], transaction[2] * prices[1])  # amount in dollars
                 # pay usd to transaction[3]
                 transaction[2] -= amount / prices[1]
                 transaction[3].add_usd(amount)
@@ -96,7 +91,7 @@ def handle_transactions():
                 share_usd[0][1].add_share(amount / prices[1])
                 # remove transaction from queue if needed
                 if share_usd[0][0] == 0:
-                    share_usd.pop(0)
+                    share_usd.popleft()
 
             if transaction[2] > 0:
                 share_usd.append([transaction[2], transaction[3]])
@@ -109,7 +104,7 @@ def handle_transactions():
             transaction[2] -= amount / prices[2]
             issue_bond(transaction[3], amount, prices[2])  # catch error from treasury
             if transaction[2] > 0:
-                bond_basis.append([transaction[2], transaction[3]])
+                transaction[3].add_basis(transaction[2])
         elif transaction[0] == "basis":  # basis -> usd
             # price save weighted mean using 2 variables
             price = (
@@ -120,7 +115,7 @@ def handle_transactions():
             while (
                 (len(basis_usd) != 0) and (basis_usd[0][0] < 0) and (transaction[2] > 0)
             ):
-                amount = min(abs(basis_usd[0][0]), transaction[2] * prices[0])
+                amount = min(-basis_usd[0][0], transaction[2] * prices[0])
                 # pay usd to transaction[3]
                 transaction[2] -= amount / prices[0]
                 transaction[3].add_usd(amount)
@@ -129,7 +124,7 @@ def handle_transactions():
                 basis_usd[0][1].add_basis(amount / prices[0])
                 # remove transaction from queue if needed
                 if basis_usd[0][0] == 0:
-                    basis_usd.pop(0)
+                    basis_usd.popleft()
 
             if transaction[2] > 0:
                 basis_usd.append([transaction[2], transaction[3]])
@@ -152,7 +147,7 @@ def handle_transactions():
                 share_usd[0][1].add_usd(amount)
                 # remove transaction from queue if needed
                 if share_usd[0][0] == 0:
-                    share_usd.pop(0)
+                    share_usd.popleft()
 
             if transaction[2] > 0:
                 share_usd.append([-transaction[2], transaction[3]])
@@ -175,7 +170,7 @@ def handle_transactions():
                 basis_usd[0][1].add_usd(amount)
                 # remove transaction from queue if needed
                 if basis_usd[0][0] == 0:
-                    basis_usd.pop(0)
+                    basis_usd.popleft()
 
             if transaction[2] > 0:
                 basis_usd.append([-transaction[2], transaction[3]])
@@ -208,15 +203,10 @@ def payback_transactions():
         elif transaction[0] < 0:
             transaction[1].add_usd(-transaction[0])
 
-    for transaction in bond_basis:
-        if transaction[0] != 0:
-            transaction[1].add_basis(transaction[0])
-
     # print("Result: ", np.sum(np.asarray(basis_usd)[:, 0]))
 
     share_usd.clear()
     basis_usd.clear()
-    bond_basis.clear()
 
 
 def launcher():
@@ -225,16 +215,14 @@ def launcher():
         transaction_queue,
         share_usd,
         basis_usd,
-        bond_basis,
         basis_supply_trajectory,
         basis_demand_trajectory,
         share_supply_trajectory,
         share_demand_trajectory,
     )
-    transaction_queue = []
-    share_usd = []  # positive: share to usd, negative: usd to share, (amount, wallet)
-    basis_usd = []  # positive: basis to usd, negative: usd to basis, (amount, wallet)
-    bond_basis = []
+    transaction_queue = deque()
+    share_usd = deque()  # positive: share to usd, negative: usd to share, (amount, wallet)
+    basis_usd = deque()  # positive: basis to usd, negative: usd to basis, (amount, wallet)
     basis_supply_trajectory = [
         [1, 1],
         [1, 1],
