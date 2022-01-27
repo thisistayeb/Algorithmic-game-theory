@@ -27,29 +27,17 @@ def start(rounds=100, update_period=24, plot=False):
     agents = []
     t_basis = protocol.treasury.treasury
     a = 500
-    b = 1000
+    b = 500
     c = 500
     d = 500
-    e = 0
+    e = 500
     f = 0
-    w1 = 0.1
-    w2 = 0.4
-    w3 = 0.1
-    w4 = 0.4
-    w5 = 0
-    w6 = 0
-    # a = 500
-    # b = 500
-    # c = 500
-    # d = 500
-    # e = 500
-    # f = 500
-    # w1 = 0
-    # w2 = 0.55
-    # w3 = 0
-    # w4 = 0.2
-    # w5 = 0.2
-    # w6 = 0.05
+    w1 = 0.1  # ideal
+    w2 = 0.45  # ideal 2
+    w3 = 0.25  # ideal 3
+    w4 = 0.1  # random
+    w5 = 0.1  # bond lover
+    w6 = 0.05  # ma trader
     # for i in range(a):
     #     agents.append(
     #         agent_creator.create_trader_agent(usd=w1 * t_basis / a, basis=w1 * t_basis / a, share=w1 * 100 / a))
