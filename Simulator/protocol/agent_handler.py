@@ -9,7 +9,7 @@ from agents import (
     ideal_agent2,
     ideal_agent3,
     ma_trader,
-    step_buyer,
+    stepbuyer,
 )
 import protocol.agents_database as agents_database
 from wallet.wallet import Wallet
@@ -69,13 +69,13 @@ def create_ideal_trader3(basis=0, share=0, usd=0, radii=0):
     return ideal_agent3.IdealAgent3(wallet, radii)
 
 
-def create_ma_trader(basis=0, share=0, usd=0, radii=0):
+def create_ma_trader(basis=0, share=0, usd=0):
     wallet = Wallet(basis=basis, share=share, usd=usd)
     agents_database.add_wallet(wallet)
     return ma_trader.MATrader(wallet)
 
 
-def create_step_buyer(basis=0, share=0, usd=0, radii=0):
+def create_step_buyer(basis=0, share=0, usd=0):
     wallet = Wallet(basis=basis, share=share, usd=usd)
     agents_database.add_wallet(wallet)
-    return step_buyer.Step_Buyer(wallet)
+    return stepbuyer.StepBuyer(wallet)

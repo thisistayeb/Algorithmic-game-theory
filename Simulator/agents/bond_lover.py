@@ -16,5 +16,5 @@ class BondLover(Agent):
         else:
             if self.wallet.usd > 0:
                 self.buy_basis(self.wallet.usd)
-            if self.wallet.basis > 0 and prices[0] > prices[2]:
+            if self.wallet.basis > 0 and prices[0] >= prices[2]:
                 self.buy_bond(self.wallet.basis)

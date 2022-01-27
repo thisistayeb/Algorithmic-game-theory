@@ -7,6 +7,7 @@ from agents.agent import Agent
 from wallet.wallet import Wallet
 from oracles.oracle import get_basis_history, get_token_price
 from utils.random_generator import random_uniform
+import random
 
 
 class MATrader(Agent):

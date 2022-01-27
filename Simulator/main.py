@@ -1,8 +1,6 @@
-import oracles.oracle
 from utils.sys_time import update_time
 import protocol.main_protocol as protocol
 import protocol.agent_handler as agent_creator
-import oracles.exchange
 import random
 from agents import (
     bond_lover,
@@ -11,7 +9,7 @@ from agents import (
     random_agent,
     ideal_agent,
     hodler,
-    trader,
+    rational_trader,
     ideal_agent2,
     ideal_agent3,
 )

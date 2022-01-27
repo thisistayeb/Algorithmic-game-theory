@@ -20,7 +20,7 @@ class RandomAgent(Agent):
             self.buy_basis(random_amount_usd)
         if choice == "sell_basis":
             self.sell_basis(random_amount_basis)
-        if choice == "buy_bond" and prices[0] > prices[2]:
+        if choice == "buy_bond" and prices[0] >= prices[2]:
             self.buy_bond(random_amount_basis)
         if choice == "buy_share":
             self.buy_share(random_amount_usd)
