@@ -66,8 +66,8 @@ def get_share_token_price():
     share_supply_price = share_supply_tr[-1][0]
     share_supply_size = share_supply_tr[-1][1]
 
-    if share_demand_size == 0 or share_supply_size == 0:
-        return 1
+    if share_demand_size < 1 or share_supply_size < 1:
+        return share_demand_price[-2]
 
     price = share_demand_size / share_supply_size
     return max(price, 0.01)
