@@ -1,4 +1,4 @@
-from oracles.token_stat import *
+import oracles.token_stat as token_stat
 from utils.sys_time import current_date
 import protocol.treasury as main_treasury
 import oracles.exchange as ex
@@ -48,7 +48,7 @@ def get_basis_price():
     basis_supply_size = basis_supply_tr[-1][1]
 
     if basis_demand_size <= 1 or basis_supply_size <= 1:
-        return basis_price_history[-2]
+        return token_stat.basis_price_history[-2]
 
     price = basis_demand_size / basis_supply_size
 
@@ -59,8 +59,7 @@ def get_share_token_price():
     share_supply_tr = share_supply_trajectory()
     share_demand_tr = share_demand_trajectory()
 
-    share_price = share_demand_tr[-1][0]
-    share_demand_size = share_demand_tr[-1][1]
+    share_price, share_demand_size = share_demand_tr[-1]
     share_supply_size = share_supply_tr[-1][1]
 
     if share_demand_size < 1 or share_supply_size < 1:
@@ -98,7 +97,7 @@ def get_bond_price():
 
     ratio = prior_bond / treasury
     expected_days_to_redeem = ((1 / (1 - ratio)) - 1) * maximum_date / 2
-    alpha = get_daily_inflation_rate()
+    alpha = token_stat.get_daily_inflation_rate()
     if alpha < 0:
         raise "Alpha should be a positive constant."
     if (basis_price > 0.9) and (basis_price < 1.1):

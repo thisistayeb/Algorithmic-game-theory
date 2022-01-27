@@ -1,6 +1,7 @@
 from agents.agent import Agent
 from wallet.wallet import Wallet
-from oracles.oracle import get_basis_history, get_token_price
+from oracles.oracle import get_token_price
+from oracles.token_stat import get_basis_history
 import random
 
 

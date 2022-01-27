@@ -5,7 +5,8 @@ N is randomly chosen for an agent between 10 and 40.
 
 from agents.agent import Agent
 from wallet.wallet import Wallet
-from oracles.oracle import get_basis_history, get_token_price
+from oracles.oracle import get_token_price
+from oracles.token_stat import get_basis_history
 from utils.random_generator import random_uniform
 import random
 

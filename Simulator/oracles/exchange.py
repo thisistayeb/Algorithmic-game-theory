@@ -72,53 +72,16 @@ def handle_transactions():
     share_demand = [1, 1]  # price and size
     share_supply = [1, 1]  # price and size
 
-    for transaction in transaction_queue:
-        if transaction[0] == "usd":
-            if transaction[1] == "basis":  # USD -> basis
-                # price save weighted mean using 2 variables
-                price = (
-                    (basis_demand[0] * basis_demand[1]) + (transaction[2] * prices[0])
-                ) / (basis_demand[1] + transaction[2])
-                basis_demand[0] = price
-                basis_demand[1] += transaction[2]
-            elif transaction[1] == "share":  # USD -> share
-                # price save weighted mean using 2 variables
-                price = (
-                    (share_demand[0] * share_demand[1]) + (transaction[2] * prices[1])
-                ) / (share_demand[1] + transaction[2])
-                share_demand[0] = price
-                share_demand[1] += transaction[2]
-
-            else:
-                raise ValueError("Illegal transaction")
-        elif transaction[0] == "share":
-            if transaction[1] == "usd":  # share -> USD
-                # price save weighted mean using 2 variables
-                price = (
-                    (share_supply[0] * share_supply[1]) + (transaction[2] * prices[1])
-                ) / (share_supply[1] + transaction[2])
-                share_supply[0] = price
-                share_supply[1] += transaction[2]
-
-            else:
-                raise ValueError("Illegal transaction")
-        elif transaction[0] == "basis":
-            if transaction[1] == "usd":  # basis -> USD
-                # price save weighted mean using 2 variables
-                price = (
-                    (basis_supply[0] * basis_supply[1]) + (transaction[2] * prices[0])
-                ) / max(0.01, (basis_supply[1] + transaction[2]))
-                basis_supply[0] = price
-                basis_supply[1] += transaction[2]
-    basis_demand_trajectory.append(basis_demand)
-    basis_supply_trajectory.append(basis_supply)
-    share_demand_trajectory.append(share_demand)
-    share_supply_trajectory.append(share_supply)
-
     # print(f"Basis prices is {oracle.get_token_price()[0]}")
 
     for transaction in transaction_queue:
         if transaction[0] == "share":  # share -> usd
+            # price save weighted mean using 2 variables
+            price = (
+                            (share_supply[0] * share_supply[1]) + (transaction[2] * prices[1])
+                    ) / (share_supply[1] + transaction[2])
+            share_supply[0] = price
+            share_supply[1] += transaction[2]
             while (
                 (len(share_usd) != 0) and (share_usd[0][0] < 0) and (transaction[2] > 0)
             ):
@@ -148,6 +111,12 @@ def handle_transactions():
             if transaction[2] > 0:
                 bond_basis.append([transaction[2], transaction[3]])
         elif transaction[0] == "basis":  # basis -> usd
+            # price save weighted mean using 2 variables
+            price = (
+                            (basis_supply[0] * basis_supply[1]) + (transaction[2] * prices[0])
+                    ) / max(0.01, (basis_supply[1] + transaction[2]))
+            basis_supply[0] = price
+            basis_supply[1] += transaction[2]
             while (
                 (len(basis_usd) != 0) and (basis_usd[0][0] < 0) and (transaction[2] > 0)
             ):
@@ -165,6 +134,12 @@ def handle_transactions():
             if transaction[2] > 0:
                 basis_usd.append([transaction[2], transaction[3]])
         elif transaction[1] == "share":  # usd -> share
+            # price save weighted mean using 2 variables
+            price = (
+                            (share_demand[0] * share_demand[1]) + (transaction[2] * prices[1])
+                    ) / (share_demand[1] + transaction[2])
+            share_demand[0] = price
+            share_demand[1] += transaction[2]
             while (
                 (len(share_usd) != 0) and (share_usd[0][0] > 0) and (transaction[2] > 0)
             ):
@@ -182,6 +157,12 @@ def handle_transactions():
             if transaction[2] > 0:
                 share_usd.append([-transaction[2], transaction[3]])
         elif transaction[1] == "basis":  # usd -> basis
+            # price save weighted mean using 2 variables
+            price = (
+                            (basis_demand[0] * basis_demand[1]) + (transaction[2] * prices[0])
+                    ) / (basis_demand[1] + transaction[2])
+            basis_demand[0] = price
+            basis_demand[1] += transaction[2]
             while (
                 (len(basis_usd) != 0) and (basis_usd[0][0] > 0) and (transaction[2] > 0)
             ):
@@ -198,6 +179,11 @@ def handle_transactions():
 
             if transaction[2] > 0:
                 basis_usd.append([-transaction[2], transaction[3]])
+
+    basis_demand_trajectory.append(basis_demand)
+    basis_supply_trajectory.append(basis_supply)
+    share_demand_trajectory.append(share_demand)
+    share_supply_trajectory.append(share_supply)
 
     transaction_queue.clear()
     token_stat.basis_price_history.append(prices[0])
