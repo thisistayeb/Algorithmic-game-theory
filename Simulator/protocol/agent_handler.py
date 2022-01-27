@@ -5,7 +5,7 @@ from agents import (
     random_agent,
     ideal_agent,
     hodler,
-    trader,
+    rational_trader,
     ideal_agent2, ideal_agent3,
 )
 import protocol.agents_database as agents_database
@@ -54,10 +54,10 @@ def create_hodler_agent(basis=0, share=0, usd=0):
     return hodler.Hodler(wallet)
 
 
-def create_trader_agent(basis=0, share=0, usd=0):
+def create_rational_trader_agent(basis=0, share=0, usd=0):
     wallet = Wallet(basis=basis, share=share, usd=usd)
     agents_database.add_wallet(wallet)
-    return trader.Trader(wallet)
+    return trader.RationalTrader(wallet)
 
 
 def create_ideal_trader3(basis=0, share=0, usd=0, radii=0):
