@@ -2,11 +2,10 @@ from agents.agent import Agent
 from wallet.wallet import Wallet
 from utils.random_generator import random_uniform
 
-
-class TenStep(Agent):
+class Step_Buyer(Agent):
     def __init__(self, wallet: Wallet):
         super().__init__(wallet)
-        self.N = random_uniform(5, 20)
+        self.N = random_uniform(5,20)
 
     def action(self):
         usd_portion = self.wallet.usd / self.N
@@ -17,5 +16,5 @@ class TenStep(Agent):
             random_amount_basis = random.uniform(0, self.wallet.basis / 10)
             self.sell_basis(random_amount_basis)
 
-        elif self.wallet.share > 0:
-            self.sell_share(random_amount_shares)
+        elif self.wallet.shares > 0:
+            self.sell_share(self.wallet.shares)
